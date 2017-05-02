@@ -1,6 +1,29 @@
 var { assert, expect } = require("chai");
 
-module.exports.parseWords = wordString => {
+class Pencil {
+	constructor(degradation = 0) {
+		this.wordsToWrite = [];
+		this.OriginalDegradation = degradation;
+		this.degradation = degradation;
+	}
+
+	write(words) {
+		this.wordsToWrite = parseWords(words);
+		return this;
+	}
+
+	on(paper = []) {
+		let newPaper = [];
+		let penciledResult = usePencilOn(this.wordsToWrite, this.degradation);
+		newPaper = penciledResult[0];
+		this.degradation = penciledResult[1];
+		let empty_text = "";
+		this.wordsToWrite = empty_text;
+		return newPaper;
+	}
+}
+
+var parseWords = wordString => {
 	assert.typeOf(wordString, "string", "wordString is a string");
 	var wordArray = wordString.split(" "); //['word','word']
 	var wordArray_with_letterArray = wordArray.map(eachWord => {
@@ -10,7 +33,7 @@ module.exports.parseWords = wordString => {
 	return wordArray_with_letterArray;
 };
 
-module.exports.showPaper = paper => {
+var showPaper = paper => {
 	let writing = "";
 	paper.forEach((word, i, arr) => {
 		if (i < arr.length) {
@@ -22,7 +45,7 @@ module.exports.showPaper = paper => {
 	console.log(`${writing}`);
 };
 
-module.exports.pencilStats = pencil => {
+var pencilStats = pencil => {
 	console.log(`Pencil Degradation: ${pencil.degradation}`);
 };
 
@@ -33,7 +56,6 @@ var canWriteLetter = (letterCost, durabilityFactor) => {
 		return false;
 	}
 };
-module.exports.canWriteLetter = canWriteLetter;
 
 function* iterateArray(array) {
 	var index = 0;
@@ -73,7 +95,7 @@ var writeLetter = (value, writeArray, durability) => {
 	}
 };
 
-module.exports.usePencilOn = (wordsToWrite, durability) => {
+var usePencilOn = (wordsToWrite, durability) => {
 	assert.typeOf(wordsToWrite, "array", "wordsToWrite usePencilOn");
 
 	let penciledArray = [];
@@ -96,4 +118,16 @@ module.exports.usePencilOn = (wordsToWrite, durability) => {
 	}
 
 	return iterateOverWordsToWrite();
+};
+
+var sharpen = pencil => {
+	assert.instanceOf(pencil, Pencil, "pencil is a Pencil");
+	pencil.degradation = pencil.OriginalDegradation;
+};
+
+module.exports = {
+	Pencil: Pencil,
+	showPaper: showPaper,
+	pencilStats: pencilStats,
+	sharpen: sharpen
 };

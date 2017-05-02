@@ -1,33 +1,5 @@
 var { assert, expect } = require("chai");
-var {
-	parseWords,
-	showPaper,
-	canWriteLetter,
-	usePencilOn,
-	pencilStats
-} = require("./helperCode");
-
-class Pencil {
-	constructor(degradation = 0) {
-		this.wordsToWrite = [];
-		this.degradation = degradation;
-	}
-
-	write(words) {
-		this.wordsToWrite = parseWords(words);
-		return this;
-	}
-
-	on(paper = []) {
-		let newPaper = [];
-		let penciledResult = usePencilOn(this.wordsToWrite, this.degradation);
-		newPaper = penciledResult[0];
-		this.degradation = penciledResult[1];
-		let empty_text = "";
-		this.wordsToWrite = empty_text;
-		return newPaper;
-	}
-}
+var { Pencil, showPaper, pencilStats, sharpen } = require("./helperCode");
 
 const ticonderoga = new Pencil(32);
 
@@ -42,3 +14,9 @@ collegeRule = ticonderoga
 showPaper(collegeRule);
 
 pencilStats(ticonderoga);
+sharpen(ticonderoga);
+pencilStats(ticonderoga);
+
+collegeRule = ticonderoga.write("sorry, got cut off there").on(collegeRule);
+
+showPaper(collegeRule);
