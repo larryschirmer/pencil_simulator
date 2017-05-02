@@ -5,20 +5,38 @@ const ticonderoga = new Pencil(320, 5);
 pencilStats(ticonderoga);
 
 let collegeRule = [];
+let stationary = [];
 
+stationary = ticonderoga.write('My Dearest, You are so dear').on(stationary);
 collegeRule = ticonderoga
-	.write('I hear its nice this time of year')
+	.write('Title: Hamsters Do Eat Blueberries')
 	.on(collegeRule);
 
-showPaper(collegeRule);
+showPaper(stationary);
 
 var erase_opt = {
-	word: 7,
+	word: 5,
 	amt: 10
 };
-collegeRule = ticonderoga.erase(erase_opt).from(collegeRule);
+stationary = ticonderoga.erase(erase_opt).from(stationary);
 
-collegeRule = ticonderoga.write('month').on(collegeRule);
+var erase_opt = {
+	word: 4,
+	amt: 10
+};
+stationary = ticonderoga.erase(erase_opt).from(stationary);
+
+showPaper(stationary);
+
+stationary = ticonderoga.write('such wow').on(stationary);
+
+showPaper(stationary);
+
+collegeRule = ticonderoga
+	.write(
+		'\nLab day One\nTerence does, in fact, eat the scientific blueberries we offer to him. On a scale from 1 to 7, he has rated them a 4'
+	)
+	.on(collegeRule);
 
 showPaper(collegeRule);
 pencilStats(ticonderoga);
