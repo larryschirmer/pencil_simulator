@@ -1,4 +1,4 @@
-var { assert, expect } = require("chai");
+var { assert, expect } = require('chai');
 
 class Pencil {
 	constructor(degradation = 0) {
@@ -12,37 +12,37 @@ class Pencil {
 		return this;
 	}
 
-	on(paper = []) {
+	on(paper) {
 		let newPaper = [];
 		let penciledResult = usePencilOn(this.wordsToWrite, this.degradation);
-		newPaper = penciledResult[0];
+		newPaper = [...paper, ...penciledResult[0]];
 		this.degradation = penciledResult[1];
-		let empty_text = "";
+		let empty_text = '';
 		this.wordsToWrite = empty_text;
 		return newPaper;
 	}
 }
 
 var parseWords = wordString => {
-	assert.typeOf(wordString, "string", "wordString is a string");
-	var wordArray = wordString.split(" "); //['word','word']
+	assert.typeOf(wordString, 'string', 'wordString is a string');
+	var wordArray = wordString.split(' '); //['word','word']
 	var wordArray_with_letterArray = wordArray.map(eachWord => {
-		var arrayOfLetters = eachWord.split(""); //[['w','o','r','d'],...]
+		var arrayOfLetters = eachWord.split(''); //[['w','o','r','d'],...]
 		return arrayOfLetters;
 	});
 	return wordArray_with_letterArray;
 };
 
 var showPaper = paper => {
-	let writing = "";
+	let writing = '';
 	paper.forEach((word, i, arr) => {
 		if (i < arr.length) {
-			writing = writing + word.join("");
-			writing = writing + " ";
+			writing = writing + word.join('');
+			writing = writing + ' ';
 		}
 	});
-	assert.typeOf(writing, "string", "writing is a string");
-	console.log(`${writing}`);
+	assert.typeOf(writing, 'string', 'writing is a string');
+	console.log(writing);
 };
 
 var pencilStats = pencil => {
@@ -65,13 +65,14 @@ function* iterateArray(array) {
 			let uppercase = false;
 			if (letter == letter.toUpperCase()) uppercase = true;
 			if (!isNaN(letter * 1)) uppercase = false;
+			if (letter === '\n') uppercase = 'newline';
 			yield [uppercase, letter, index, i];
 		}
 		index++;
-		yield ["space", index - 1, index];
+		yield ['space', index - 1, index];
 	}
 
-	yield "done";
+	yield 'done';
 }
 
 var writeLetter = (value, writeArray, durability) => {
@@ -89,14 +90,14 @@ var writeLetter = (value, writeArray, durability) => {
 		durability = durability - letterCost;
 		return [durability, writeArray];
 	} else {
-		writeArray[value[2]][value[3]] = "";
+		writeArray[value[2]][value[3]] = '';
 		return [durability, writeArray];
 		expect(durability).to.be.below(letterCost);
 	}
 };
 
 var usePencilOn = (wordsToWrite, durability) => {
-	assert.typeOf(wordsToWrite, "array", "wordsToWrite usePencilOn");
+	assert.typeOf(wordsToWrite, 'array', 'wordsToWrite usePencilOn');
 
 	let penciledArray = [];
 	var durability = durability;
@@ -110,7 +111,7 @@ var usePencilOn = (wordsToWrite, durability) => {
 		durability = returnedArray[0];
 		penciledArray = returnedArray[1];
 
-		if (value !== "done") {
+		if (value !== 'done') {
 			return iterateOverWordsToWrite();
 		} else {
 			return [penciledArray, durability];
@@ -121,7 +122,7 @@ var usePencilOn = (wordsToWrite, durability) => {
 };
 
 var sharpen = pencil => {
-	assert.instanceOf(pencil, Pencil, "pencil is a Pencil");
+	assert.instanceOf(pencil, Pencil, 'pencil is a Pencil');
 	pencil.degradation = pencil.OriginalDegradation;
 };
 
