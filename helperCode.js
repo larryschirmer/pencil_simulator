@@ -1,14 +1,21 @@
 var { assert, expect } = require('chai');
 
 class Pencil {
-	constructor(degradation = 0) {
+	constructor(degradation = 0, eraserDegradation = 0) {
 		this.wordsToWrite = [];
+		this.wordsToErase = [];
 		this.OriginalDegradation = degradation;
 		this.degradation = degradation;
+		this.eraserDegradation = eraserDegradation;
 	}
 
 	write(words) {
 		this.wordsToWrite = parseWords(words);
+		return this;
+	}
+
+	erase(opt) {
+		this.wordsToErase = [opt.word, opt.amt];
 		return this;
 	}
 
@@ -21,7 +28,38 @@ class Pencil {
 		this.wordsToWrite = empty_text;
 		return newPaper;
 	}
+
+	from(paper) {
+		var newPaper = paper;
+		var word = this.wordsToErase[0];
+		var amountOfLetters = this.wordsToErase[1];
+		var processedWord = eraseLetters(
+			paper[word],
+			amountOfLetters,
+			this.eraserDegradation
+		);
+		newPaper[word] = processedWord[0];
+		this.eraserDegradation = processedWord[1];
+		return newPaper;
+	}
 }
+
+var eraseLetters = (word, amountOfLetters, eraserDurability) => {
+	var newWord = [];
+	var newEraserDurability = eraserDurability;
+	var lettersRemaining = amountOfLetters;
+	word.reverse().forEach(letter => {
+		if (newEraserDurability > 0 && lettersRemaining > 0 && letter !== ' ') {
+			newWord = [...newWord, ' '];
+			newEraserDurability = newEraserDurability - 1;
+			lettersRemaining = lettersRemaining - 1;
+		} else {
+			newWord = [...newWord, letter];
+		}
+	});
+
+	return [newWord.reverse(), newEraserDurability];
+};
 
 var parseWords = wordString => {
 	assert.typeOf(wordString, 'string', 'wordString is a string');
@@ -42,11 +80,12 @@ var showPaper = paper => {
 		}
 	});
 	assert.typeOf(writing, 'string', 'writing is a string');
-	console.log(writing);
+	console.log(`---\n${writing}\n---`);
 };
 
 var pencilStats = pencil => {
 	console.log(`Pencil Degradation: ${pencil.degradation}`);
+	console.log(`Pencil Eraser Degradation: ${pencil.eraserDegradation}`);
 };
 
 var canWriteLetter = (letterCost, durabilityFactor) => {

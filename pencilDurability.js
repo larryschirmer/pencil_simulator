@@ -1,21 +1,24 @@
 var { assert, expect } = require('chai');
 var { Pencil, showPaper, pencilStats, sharpen } = require('./helperCode');
 
-const ticonderoga = new Pencil(32);
+const ticonderoga = new Pencil(320, 5);
+pencilStats(ticonderoga);
 
 let collegeRule = [];
 
-collegeRule = ticonderoga.write('Hello world 42').on(collegeRule);
-showPaper(collegeRule);
-
 collegeRule = ticonderoga
-	.write('hello world \nI still love you')
+	.write('I hear its nice this time of year')
 	.on(collegeRule);
+
 showPaper(collegeRule);
 
-sharpen(ticonderoga);
+var erase_opt = {
+	word: 7,
+	amt: 10
+};
+collegeRule = ticonderoga.erase(erase_opt).from(collegeRule);
 
+collegeRule = ticonderoga.write('month').on(collegeRule);
+
+showPaper(collegeRule);
 pencilStats(ticonderoga);
-
-collegeRule = ticonderoga.write('sorry, got cut off there').on(collegeRule);
-showPaper(collegeRule);
