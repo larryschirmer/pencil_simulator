@@ -1,7 +1,8 @@
 'use strict';
 
 var { assert, expect } = require('chai');
-var { Pencil, showPaper, pencilStats } = require('../helperCode');
+var { showPaper, inspect } = require('../view');
+var { Pencil } = require('../pencilLogic');
 
 describe('new Pencil()', function() {
 	it('makes a new pencil when positive intergers are passed', function() {
@@ -50,7 +51,45 @@ describe('new Pencil()', function() {
 	});
 });
 
-describe('pencil.write()', function() {});
+describe('pencil.write()', function() {
+	it('should exist', function() {
+		let graphiteDegradationStrength = 32, eraserDegradationStrength = 10;
+		const prismacolor = new Pencil(
+			graphiteDegradationStrength,
+			eraserDegradationStrength
+		);
+		assert.isFunction(prismacolor.write);
+	});
+	it('should return an Array of Arrays of strings for each letter', function() {
+		let graphiteDegradationStrength = 32, eraserDegradationStrength = 10;
+		const prismacolor = new Pencil(
+			graphiteDegradationStrength,
+			eraserDegradationStrength
+		);
+		prismacolor.write('Hello World');
+
+		assert.deepEqual(prismacolor.wordsToWrite, [
+			['H', 'e', 'l', 'l', 'o'],
+			['W', 'o', 'r', 'l', 'd']
+		]);
+	});
+	it('should append an empty array for extra spaces', function() {
+		let graphiteDegradationStrength = 32, eraserDegradationStrength = 10;
+		const prismacolor = new Pencil(
+			graphiteDegradationStrength,
+			eraserDegradationStrength
+		);
+		var arrayToCheck = prismacolor.write('Hello   World ').wordsToWrite;
+
+		assert.deepEqual(arrayToCheck, [
+			['H', 'e', 'l', 'l', 'o'],
+			[],
+			[],
+			['W', 'o', 'r', 'l', 'd'],
+			[]
+		]);
+	});
+});
 
 /*
 describe('', function() {
