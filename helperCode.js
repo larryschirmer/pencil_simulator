@@ -1,47 +1,63 @@
 var { assert, expect } = require('chai');
 
-class Pencil {
-	constructor(degradation = 0, eraserDegradation = 0) {
-		this.wordsToWrite = [];
-		this.wordsToErase = [];
-		this.OriginalDegradation = degradation;
-		this.degradation = degradation;
-		this.eraserDegradation = eraserDegradation;
-	}
+function Pencil(degradation = 0, eraserDegradation = 0) {
+	if (degradation < 0 || eraserDegradation < 0)
+		throw new TypeError('new Pencil may not have negitive properties');
+	if (typeof degradation === 'string' || typeof eraserDegradation === 'string')
+		throw new TypeError('new Pencil may not have a string property');
 
-	write(words) {
-		this.wordsToWrite = parseWords(words);
+	const obj = {};
+
+	Object.setPrototypeOf(obj, Pencil.prototype);
+
+	function write(words) {
+		obj.wordsToWrite = parseWords(words);
 		return this;
 	}
 
-	erase(opt) {
-		this.wordsToErase = [opt.word, opt.amt];
+	function erase(opt) {
+		obj.wordsToErase = [opt.word, opt.amt];
 		return this;
 	}
 
-	on(paper) {
+	function on(paper) {
 		let newPaper = [];
-		let penciledResult = usePencilOn(this.wordsToWrite, this.degradation);
+		let penciledResult = usePencilOn(obj.wordsToWrite, obj.degradation);
 		newPaper = [...paper, ...penciledResult[0]];
-		this.degradation = penciledResult[1];
+		obj.degradation = penciledResult[1];
 		let empty_text = '';
-		this.wordsToWrite = empty_text;
+		obj.wordsToWrite = empty_text;
 		return newPaper;
 	}
 
-	from(paper) {
+	function from(paper) {
 		var newPaper = paper;
-		var word = this.wordsToErase[0];
-		var amountOfLetters = this.wordsToErase[1];
+		var word = obj.wordsToErase[0];
+		var amountOfLetters = obj.wordsToErase[1];
 		var processedWord = eraseLetters(
 			paper[word],
 			amountOfLetters,
-			this.eraserDegradation
+			obj.eraserDegradation
 		);
 		newPaper[word] = processedWord[0];
-		this.eraserDegradation = processedWord[1];
+		obj.eraserDegradation = processedWord[1];
 		return newPaper;
 	}
+
+	var passedParameterDegradation = Math.floor(degradation);
+	var passedParameterEraserDegradation = Math.floor(eraserDegradation);
+
+	obj.wordsToWrite = [];
+	obj.wordsToErase = [];
+	obj.OriginalDegradation = passedParameterDegradation;
+	obj.degradation = passedParameterDegradation;
+	obj.eraserDegradation = passedParameterEraserDegradation;
+	obj.write = write;
+	obj.erase = erase;
+	obj.on = on;
+	obj.from = from;
+
+	return obj;
 }
 
 var eraseLetters = (word, amountOfLetters, eraserDurability) => {
@@ -166,8 +182,8 @@ var sharpen = pencil => {
 };
 
 module.exports = {
-	Pencil: Pencil,
-	showPaper: showPaper,
-	pencilStats: pencilStats,
-	sharpen: sharpen
+	Pencil,
+	showPaper,
+	pencilStats,
+	sharpen
 };

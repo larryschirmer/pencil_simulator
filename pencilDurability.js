@@ -1,10 +1,22 @@
 var { assert, expect } = require('chai');
 var { Pencil, showPaper, pencilStats, sharpen } = require('./helperCode');
 
-const ticonderoga = new Pencil(320, 5);
+const ticonderoga = new Pencil(-320, 5);
+console.log(`degradation: ${ticonderoga.degradation}`);
+
 pencilStats(ticonderoga);
 
 let collegeRule = [];
+
+collegeRule = ticonderoga
+	.write('Title: Hamsters Do Eat Blueberries')
+	.on(collegeRule);
+
+showPaper(collegeRule);
+/*
+
+
+
 let stationary = [];
 
 stationary = ticonderoga.write('My Dearest, You are so dear').on(stationary);
@@ -40,3 +52,4 @@ collegeRule = ticonderoga
 
 showPaper(collegeRule);
 pencilStats(ticonderoga);
+*/
