@@ -49,3 +49,13 @@ describe('new Pencil()', function() {
 		}).to.throw('new Pencil may not have a string property');
 	});
 });
+
+describe('pencil.write()', function() {});
+
+/*
+describe('', function() {
+	it('', function() {
+
+	})
+})
+*/
