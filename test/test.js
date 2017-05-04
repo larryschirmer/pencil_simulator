@@ -273,11 +273,78 @@ describe('pencil.erase()', function() {
 	});
 });
 
+let spy = sinon.spy(console, 'log');
 describe('showPaper()', function() {
-	it('display words written to paper one time', function() {});
-	it('display words written to the same paper three times', function() {});
-	it('display a paper after one word is erased', function() {});
-	it('display a paper after three words are erased', function() {});
+	it('display words written to paper one time', function() {
+		let graphiteDegradationStrength = 18, eraserDegradationStrength = 10;
+		const prismacolor = new Pencil(
+			graphiteDegradationStrength,
+			eraserDegradationStrength
+		);
+		let easel = [];
+		easel = prismacolor.write('Hello World').on(easel);
+		showPaper(easel);
+		nativeAssert(spy.calledWith('---\nHello World\n---'));
+	});
+	it('display words written to the same paper three times', function() {
+		let graphiteDegradationStrength = 75, eraserDegradationStrength = 10;
+		const prismacolor = new Pencil(
+			graphiteDegradationStrength,
+			eraserDegradationStrength
+		);
+		let easel = [];
+		easel = prismacolor.write('Hello').on(easel);
+		easel = prismacolor.write('Dolores').on(easel);
+		easel = prismacolor.write('\nWelcome to World').on(easel);
+		showPaper(easel);
+		nativeAssert(spy.calledWith('---\nHello Dolores \nWelcome to World\n---'));
+	});
+	it('display a paper after one word is erased', function() {
+		let graphiteDegradationStrength = 75, eraserDegradationStrength = 10;
+		const prismacolor = new Pencil(
+			graphiteDegradationStrength,
+			eraserDegradationStrength
+		);
+		let easel = [];
+		easel = prismacolor.write('Hello').on(easel);
+		easel = prismacolor.write('Dolores').on(easel);
+		easel = prismacolor.write('\nWelcome to World').on(easel);
+		var erase_opt = {
+			word: 2,
+			amt: 4
+		};
+		easel = prismacolor.erase(erase_opt).from(easel);
+		showPaper(easel);
+		nativeAssert(spy.calledWith('---\nHello Dolores \nWel     to World\n---'));
+	});
+	it('display a paper after three words are erased', function() {
+		let graphiteDegradationStrength = 75, eraserDegradationStrength = 10;
+		const prismacolor = new Pencil(
+			graphiteDegradationStrength,
+			eraserDegradationStrength
+		);
+		let easel = [];
+		easel = prismacolor.write('Hello').on(easel);
+		easel = prismacolor.write('Dolores').on(easel);
+		easel = prismacolor.write('\nWelcome to World').on(easel);
+		var erase_opt = {
+			word: 2,
+			amt: 4
+		};
+		easel = prismacolor.erase(erase_opt).from(easel);
+		var erase_opt = {
+			word: 3,
+			amt: 1
+		};
+		easel = prismacolor.erase(erase_opt).from(easel);
+		var erase_opt = {
+			word: 0,
+			amt: 3
+		};
+		easel = prismacolor.erase(erase_opt).from(easel);
+		showPaper(easel);
+		nativeAssert(spy.calledWith('---\nHe    Dolores \nWel     t  World\n---'));
+	});
 });
 
 /*
