@@ -1,3 +1,5 @@
+var { Pencil } = require('./pencilLogic');
+
 var showPaper = paper => {
 	let writing = '';
 	paper.forEach((word, i, arr) => {
@@ -12,9 +14,13 @@ var showPaper = paper => {
 };
 
 var inspect = pencil => {
-	//Check that pencil is a Pencil
-	console.log(`Pencil Degradation: ${pencil.degradation}`);
-	console.log(`Pencil Eraser Degradation: ${pencil.eraserDegradation}`);
+	if (pencil instanceof Pencil) {
+		console.log(
+			`---\nPencil Degradation: ${pencil.degradation}\nPencil Eraser Degradation: ${pencil.eraserDegradation}\n---`
+		);
+	} else {
+		throw new TypeError('inspect() can only inspect Pencil objects');
+	}
 };
 
 module.exports = {

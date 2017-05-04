@@ -275,7 +275,10 @@ describe('pencil.erase()', function() {
 
 let spy = sinon.spy(console, 'log');
 describe('showPaper()', function() {
-	it('display words written to paper one time', function() {
+	it('should exist', function() {
+		assert.isFunction(showPaper);
+	});
+	it('displays words written to paper one time', function() {
 		let graphiteDegradationStrength = 18, eraserDegradationStrength = 10;
 		const prismacolor = new Pencil(
 			graphiteDegradationStrength,
@@ -286,7 +289,7 @@ describe('showPaper()', function() {
 		showPaper(easel);
 		nativeAssert(spy.calledWith('---\nHello World\n---'));
 	});
-	it('display words written to the same paper three times', function() {
+	it('displays words written to the same paper three times', function() {
 		let graphiteDegradationStrength = 75, eraserDegradationStrength = 10;
 		const prismacolor = new Pencil(
 			graphiteDegradationStrength,
@@ -299,7 +302,7 @@ describe('showPaper()', function() {
 		showPaper(easel);
 		nativeAssert(spy.calledWith('---\nHello Dolores \nWelcome to World\n---'));
 	});
-	it('display a paper after one word is erased', function() {
+	it('displays a paper after one word is erased', function() {
 		let graphiteDegradationStrength = 75, eraserDegradationStrength = 10;
 		const prismacolor = new Pencil(
 			graphiteDegradationStrength,
@@ -317,7 +320,7 @@ describe('showPaper()', function() {
 		showPaper(easel);
 		nativeAssert(spy.calledWith('---\nHello Dolores \nWel     to World\n---'));
 	});
-	it('display a paper after three words are erased', function() {
+	it('displays a paper after three words are erased', function() {
 		let graphiteDegradationStrength = 75, eraserDegradationStrength = 10;
 		const prismacolor = new Pencil(
 			graphiteDegradationStrength,
@@ -344,6 +347,27 @@ describe('showPaper()', function() {
 		easel = prismacolor.erase(erase_opt).from(easel);
 		showPaper(easel);
 		nativeAssert(spy.calledWith('---\nHe    Dolores \nWel     t  World\n---'));
+	});
+});
+
+describe('inspect()', function() {
+	it('should exist', function() {
+		assert.isFunction(inspect);
+	});
+	it('handles inspecting non-pencils by throwing an error', function() {
+		expect(_ => {
+			const prismacolor = new Object(38, 5);
+			inspect(prismacolor);
+		}).to.throw('inspect() can only inspect Pencil objects');
+	});
+	it('displays the status of the pencil in question', function() {
+		const prismacolor = new Pencil(38, 5);
+		inspect(prismacolor);
+		nativeAssert(
+			spy.calledWith(
+				`---\nPencil Degradation: 38\nPencil Eraser Degradation: 5\n---`
+			)
+		);
 	});
 });
 
