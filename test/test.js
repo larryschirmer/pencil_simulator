@@ -134,15 +134,40 @@ describe('pencil.write()', function() {
 			]
 		]);
 	});
-	it('should stop writing when full point degradation is reached', function() {
+	it('should stop writing when point degradation is reached', function() {
 		const prismacolor = new Pencil(8, 5);
 		let easel = [];
 		easel = prismacolor.write('Hello World').on(easel);
 		assert.deepEqual(easel, [['H', 'e', 'l', 'l', 'o'], ['W', '', '', '', '']]);
 	});
+	it('should write new words to existing array', function() {
+		let graphiteDegradationStrength = 320, eraserDegradationStrength = 10;
+		const prismacolor = new Pencil(
+			graphiteDegradationStrength,
+			eraserDegradationStrength
+		);
+		let easel = [];
+		easel = prismacolor.write('Hello Dolores').on(easel);
+		easel = prismacolor.write('\nWelcome to World').on(easel);
+		assert.deepEqual(easel, [
+			['H', 'e', 'l', 'l', 'o'],
+			['D', 'o', 'l', 'o', 'r', 'e', 's'],
+			['\n', 'W', 'e', 'l', 'c', 'o', 'm', 'e'],
+			['t', 'o'],
+			['W', 'o', 'r', 'l', 'd']
+		]);
+	});
 });
 
 describe('pencil.sharpen()', function() {
+	it('should exist', function() {
+		let graphiteDegradationStrength = 18, eraserDegradationStrength = 5;
+		const prismacolor = new Pencil(
+			graphiteDegradationStrength,
+			eraserDegradationStrength
+		);
+		assert.isFunction(prismacolor.sharpen);
+	});
 	it('restores the point to original health after use', function() {
 		const prismacolor = new Pencil(18, 5);
 		let easel = [];
@@ -153,25 +178,97 @@ describe('pencil.sharpen()', function() {
 });
 
 describe('pencil.erase()', function() {
-	it('should remove partial words', function() {
-		let graphiteDegradationStrength = 32, eraserDegradationStrength = 10;
+	it('should exist', function() {
+		let graphiteDegradationStrength = 18, eraserDegradationStrength = 5;
 		const prismacolor = new Pencil(
 			graphiteDegradationStrength,
 			eraserDegradationStrength
 		);
-		prismacolor.write('Hello World');
+		assert.isFunction(prismacolor.erase);
+	});
+	it('should remove partial words', function() {
+		let graphiteDegradationStrength = 18, eraserDegradationStrength = 5;
+		const prismacolor = new Pencil(
+			graphiteDegradationStrength,
+			eraserDegradationStrength
+		);
+		let easel = [];
+		easel = prismacolor.write('Hello World').on(easel);
 
-		assert.deepEqual(prismacolor.wordsToWrite, [
+		var erase_opt = {
+			word: 1,
+			amt: 2
+		};
+		easel = prismacolor.erase(erase_opt).from(easel);
+
+		assert.deepEqual(easel, [
 			['H', 'e', 'l', 'l', 'o'],
-			['W', 'o', 'r', 'l', 'd']
+			['W', 'o', 'r', ' ', ' ']
 		]);
 	});
 
-	it('should remove whole words', function() {});
+	it('should remove whole words', function() {
+		let graphiteDegradationStrength = 18, eraserDegradationStrength = 5;
+		const prismacolor = new Pencil(
+			graphiteDegradationStrength,
+			eraserDegradationStrength
+		);
+		let easel = [];
+		easel = prismacolor.write('Hello World').on(easel);
 
-	it('should stop removing letters when word length is reached', function() {});
+		var erase_opt = {
+			word: 1,
+			amt: 5
+		};
+		easel = prismacolor.erase(erase_opt).from(easel);
 
-	it('should stop removing letters when eraser heath is used up', function() {});
+		assert.deepEqual(easel, [
+			['H', 'e', 'l', 'l', 'o'],
+			[' ', ' ', ' ', ' ', ' ']
+		]);
+	});
+
+	it('should stop removing letters when word length is reached', function() {
+		let graphiteDegradationStrength = 18, eraserDegradationStrength = 5;
+		const prismacolor = new Pencil(
+			graphiteDegradationStrength,
+			eraserDegradationStrength
+		);
+		let easel = [];
+		easel = prismacolor.write('Hello World').on(easel);
+
+		var erase_opt = {
+			word: 1,
+			amt: 15
+		};
+		easel = prismacolor.erase(erase_opt).from(easel);
+
+		assert.deepEqual(easel, [
+			['H', 'e', 'l', 'l', 'o'],
+			[' ', ' ', ' ', ' ', ' ']
+		]);
+	});
+
+	it('should stop removing letters when eraser heath is used up', function() {
+		let graphiteDegradationStrength = 18, eraserDegradationStrength = 3;
+		const prismacolor = new Pencil(
+			graphiteDegradationStrength,
+			eraserDegradationStrength
+		);
+		let easel = [];
+		easel = prismacolor.write('Hello World').on(easel);
+
+		var erase_opt = {
+			word: 1,
+			amt: 5
+		};
+		easel = prismacolor.erase(erase_opt).from(easel);
+
+		assert.deepEqual(easel, [
+			['H', 'e', 'l', 'l', 'o'],
+			['W', 'o', ' ', ' ', ' ']
+		]);
+	});
 });
 
 /*
