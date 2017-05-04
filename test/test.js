@@ -1,6 +1,8 @@
 'use strict';
 
 var { assert, expect } = require('chai');
+const sinon = require('sinon');
+const nativeAssert = require('assert');
 var { showPaper, inspect } = require('../view');
 var { Pencil } = require('../pencilLogic');
 
@@ -269,6 +271,13 @@ describe('pencil.erase()', function() {
 			['W', 'o', ' ', ' ', ' ']
 		]);
 	});
+});
+
+describe('showPaper()', function() {
+	it('display words written to paper one time', function() {});
+	it('display words written to the same paper three times', function() {});
+	it('display a paper after one word is erased', function() {});
+	it('display a paper after three words are erased', function() {});
 });
 
 /*

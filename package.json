@@ -6,11 +6,12 @@
   "scripts": {
     "test": "mocha"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "Larry Schirmer",
+  "license": "MIT",
   "dependencies": {
     "chai": "^3.5.0",
-    "mocha": "^3.3.0"
+    "mocha": "^3.3.0",
+    "sinon": "^2.2.0"
   },
   "devDependencies": {
     "mocha": "^3.3.0"

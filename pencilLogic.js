@@ -101,12 +101,15 @@ var applyPencil = (wordsToWrite, originalDurability) => {
 	return iterateOverWordsToWrite();
 };
 
+var degrade = (originalAmount, howMuchToDegrade) => {
+	return originalAmount - howMuchToDegrade;
+};
+
 var writeLetter = (value, writeArray, durability) => {
 	let letterCost = value[0];
 
 	if (checkIfLetterCanBeWritten(letterCost, durability)) {
-		durability = durability - letterCost;
-		return [durability, writeArray];
+		return [degrade(durability, letterCost), writeArray];
 	} else {
 		//value[2] = wordIndex, value[3] = letterIndex
 		writeArray[value[2]][value[3]] = '';
@@ -146,19 +149,19 @@ var checkIfLetterCanBeWritten = (letterCost, durabilityFactor) => {
 	}
 };
 
-var eraseLetters = (word, amountOfLetters, eraserDurability) => {
+var eraseLetters = (word, amountOfLetters, durability) => {
 	var newWord = [];
-	var newEraserDurability = eraserDurability;
+	var eraserDurability = durability;
 	var lettersRemaining = amountOfLetters;
 	word.reverse().forEach(letter => {
-		if (newEraserDurability > 0 && lettersRemaining > 0 && letter !== ' ') {
+		if (eraserDurability > 0 && lettersRemaining > 0 && letter !== ' ') {
 			newWord = [...newWord, ' '];
-			newEraserDurability = newEraserDurability - 1;
+			eraserDurability = degrade(eraserDurability, 1);
 			lettersRemaining = lettersRemaining - 1;
 		} else {
 			newWord = [...newWord, letter];
 		}
 	});
 
-	return [newWord.reverse(), newEraserDurability];
+	return [newWord.reverse(), eraserDurability];
 };
