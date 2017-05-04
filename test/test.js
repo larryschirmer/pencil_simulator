@@ -141,14 +141,44 @@ describe('pencil.write()', function() {
 		assert.deepEqual(easel, [['H', 'e', 'l', 'l', 'o'], ['W', '', '', '', '']]);
 	});
 });
+
 describe('pencil.sharpen()', function() {
-	it('restores the point to original health after use', function() {});
+	it('restores the point to original health after use', function() {
+		const prismacolor = new Pencil(18, 5);
+		let easel = [];
+		easel = prismacolor.write('Hello World').on(easel);
+		prismacolor.sharpen();
+		assert.equal(prismacolor.degradation, prismacolor.OriginalDegradation);
+	});
+});
+
+describe('pencil.erase()', function() {
+	it('should remove partial words', function() {
+		let graphiteDegradationStrength = 32, eraserDegradationStrength = 10;
+		const prismacolor = new Pencil(
+			graphiteDegradationStrength,
+			eraserDegradationStrength
+		);
+		prismacolor.write('Hello World');
+
+		assert.deepEqual(prismacolor.wordsToWrite, [
+			['H', 'e', 'l', 'l', 'o'],
+			['W', 'o', 'r', 'l', 'd']
+		]);
+	});
+
+	it('should remove whole words', function() {});
+
+	it('should stop removing letters when word length is reached', function() {});
+
+	it('should stop removing letters when eraser heath is used up', function() {});
 });
 
 /*
 describe('', function() {
 	it('', function() {
 
+		assert.deepEqual( , );
 	})
 })
 */
