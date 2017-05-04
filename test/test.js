@@ -6,6 +6,8 @@ const nativeAssert = require('assert');
 var { showPaper, inspect } = require('../view');
 var { Pencil } = require('../pencilLogic');
 
+let spy = sinon.spy(console, 'log');
+
 describe('new Pencil()', function() {
 	it('makes a new pencil when positive intergers are passed', function() {
 		let graphiteDegradationStrength = 32, eraserDegradationStrength = 32;
@@ -271,9 +273,133 @@ describe('pencil.erase()', function() {
 			['W', 'o', ' ', ' ', ' ']
 		]);
 	});
+
+	it('should skip over carrage returns', function() {
+		let graphiteDegradationStrength = 18, eraserDegradationStrength = 10;
+		const prismacolor = new Pencil(
+			graphiteDegradationStrength,
+			eraserDegradationStrength
+		);
+		let easel = [];
+		easel = prismacolor.write('Hello \nWorld').on(easel);
+
+		var erase_opt = {
+			word: 1,
+			amt: 6
+		};
+		easel = prismacolor.erase(erase_opt).from(easel);
+
+		assert.deepEqual(easel, [
+			['H', 'e', 'l', 'l', 'o'],
+			['\n', ' ', ' ', ' ', ' ', ' ']
+		]);
+	});
 });
 
-let spy = sinon.spy(console, 'log');
+describe('pencil.edit()', function() {
+	it('should exist', function() {
+		let graphiteDegradationStrength = 18, eraserDegradationStrength = 5;
+		const prismacolor = new Pencil(
+			graphiteDegradationStrength,
+			eraserDegradationStrength
+		);
+		assert.isFunction(prismacolor.edit);
+	});
+	it('takes new text and writes over text on a paper', function() {
+		let graphiteDegradationStrength = 75, eraserDegradationStrength = 10;
+		const prismacolor = new Pencil(
+			graphiteDegradationStrength,
+			eraserDegradationStrength
+		);
+		let easel = [];
+		easel = prismacolor.write('Hello').on(easel);
+		easel = prismacolor.write('Dolores').on(easel);
+		easel = prismacolor.write('\nWelcome to World').on(easel);
+		var erase_opt = {
+			word: 1,
+			amt: 7
+		};
+		easel = prismacolor.erase(erase_opt).from(easel);
+
+		let edit_opts = {
+			char_number: 7,
+			word: 'Awesome'
+		};
+		easel = prismacolor.edit(edit_opts).into(easel);
+		assert.deepEqual(
+			easel,
+			assert.deepEqual(easel, [
+				['H', 'e', 'l', 'l', 'o'],
+				['A', 'w', 'e', 's', 'o', 'm', 'e'],
+				['\n', 'W', 'e', 'l', 'c', 'o', 'm', 'e'],
+				['t', 'o'],
+				['W', 'o', 'r', 'l', 'd']
+			])
+		);
+	});
+	it('combines word arrays together where necessary', function() {
+		let graphiteDegradationStrength = 75, eraserDegradationStrength = 10;
+		const prismacolor = new Pencil(
+			graphiteDegradationStrength,
+			eraserDegradationStrength
+		);
+		let easel = [];
+		easel = prismacolor.write('Hello').on(easel);
+		easel = prismacolor.write('Dolores').on(easel);
+		easel = prismacolor.write('\nWelcome to World').on(easel);
+		var erase_opt = {
+			word: 1,
+			amt: 7
+		};
+		easel = prismacolor.erase(erase_opt).from(easel);
+		let edit_opts = {
+			char_number: 6,
+			word: 'Awesome'
+		};
+		easel = prismacolor.edit(edit_opts).into(easel);
+		assert.deepEqual(easel, [
+			['H', 'e', 'l', 'l', 'o'],
+			['A', 'w', 'e', 's', 'o', 'm', 'e'],
+			['\n', 'W', 'e', 'l', 'c', 'o', 'm', 'e'],
+			['t', 'o'],
+			['W', 'o', 'r', 'l', 'd']
+		]);
+		edit_opts = {
+			char_number: 15,
+			word: 'pizza'
+		};
+		easel = prismacolor.edit(edit_opts).into(easel);
+		edit_opts = {
+			char_number: 22,
+			word: 'e mezuzzah'
+		};
+		easel = prismacolor.edit(edit_opts).into(easel);
+		assert.deepEqual(easel, [
+			['H', 'e', 'l', 'l', 'o'],
+			['A', 'w', 'e', 's', 'o', 'm', 'e'],
+			[
+				'\n',
+				'@',
+				'@',
+				'@',
+				'@',
+				'@',
+				'm',
+				'e',
+				'e',
+				't',
+				'@',
+				'@',
+				'@',
+				'@',
+				'@',
+				'@',
+				'@'
+			]
+		]);
+	});
+});
+
 describe('showPaper()', function() {
 	it('should exist', function() {
 		assert.isFunction(showPaper);
