@@ -125,7 +125,7 @@ function* iterateOverEntireArray(array) {
 			letterIndex++
 		) {
 			let letter = array[wordIndex][letterIndex];
-			let letterCost = 0;
+			let letterCost = 1;
 			if (letter == letter.toUpperCase()) letterCost = 2; //is uppercase
 			if (!isNaN(letter * 1)) letterCost = 1; //is a number
 			if (letter === '\n') letterCost = 0; //is carrage return

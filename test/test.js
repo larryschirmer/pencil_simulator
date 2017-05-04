@@ -89,6 +89,60 @@ describe('pencil.write()', function() {
 			[]
 		]);
 	});
+	it('handle special characters', function() {
+		let graphiteDegradationStrength = 32, eraserDegradationStrength = 10;
+		const prismacolor = new Pencil(
+			graphiteDegradationStrength,
+			eraserDegradationStrength
+		);
+		var arrayToCheck = prismacolor.write(' !"#$%&()*+,-./:;<=>?@[]^_`{|}~')
+			.wordsToWrite;
+
+		assert.deepEqual(arrayToCheck, [
+			[],
+			[
+				'!',
+				'"',
+				'#',
+				'$',
+				'%',
+				'&',
+				'(',
+				')',
+				'*',
+				'+',
+				',',
+				'-',
+				'.',
+				'/',
+				':',
+				';',
+				'<',
+				'=',
+				'>',
+				'?',
+				'@',
+				'[',
+				']',
+				'^',
+				'_',
+				'`',
+				'{',
+				'|',
+				'}',
+				'~'
+			]
+		]);
+	});
+	it('should stop writing when full point degradation is reached', function() {
+		const prismacolor = new Pencil(8, 5);
+		let easel = [];
+		easel = prismacolor.write('Hello World').on(easel);
+		assert.deepEqual(easel, [['H', 'e', 'l', 'l', 'o'], ['W', '', '', '', '']]);
+	});
+});
+describe('pencil.sharpen()', function() {
+	it('restores the point to original health after use', function() {});
 });
 
 /*

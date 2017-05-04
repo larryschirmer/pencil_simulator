@@ -2,12 +2,13 @@
 var { showPaper, inspect } = require('./view');
 var { Pencil } = require('./pencilLogic');
 
-const ticonderoga = new Pencil(320, 5);
+const ticonderoga = new Pencil(38, 5);
 
 inspect(ticonderoga);
 
 let collegeRule = [];
 
-collegeRule = ticonderoga.write('Title:  Hamsters  Do  Eat').on(collegeRule);
-
+collegeRule = ticonderoga.write('Hello World').on(collegeRule);
+console.log(JSON.stringify(collegeRule));
+inspect(ticonderoga);
 showPaper(collegeRule);
