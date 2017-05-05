@@ -1,10 +1,14 @@
 'use strict';
-function Pencil(degradation = 0, eraserDegradation = 0) {
+function Pencil(degradation = 0, eraserDegradation = 0, pencilLength = 0) {
 	//Throw error if included parameters are negitive
-	if (degradation < 0 || eraserDegradation < 0)
+	if (degradation < 0 || eraserDegradation < 0 || pencilLength < 0)
 		throw new TypeError('new Pencil may not have negitive properties');
 	//Throw error if included parameters are a string
-	if (typeof degradation === 'string' || typeof eraserDegradation === 'string')
+	if (
+		typeof degradation === 'string' ||
+		typeof eraserDegradation === 'string' ||
+		typeof pencilLength === 'string'
+	)
 		throw new TypeError('new Pencil may not have a string property');
 
 	const obj = {};
@@ -65,6 +69,7 @@ function Pencil(degradation = 0, eraserDegradation = 0) {
 
 	let passedParameterDegradation = Math.floor(degradation);
 	let passedParameterEraserDegradation = Math.floor(eraserDegradation);
+	let passedParameterPencilLength = Math.floor(pencilLength);
 
 	obj.wordsToWrite = [];
 	obj.wordsToErase = [];
@@ -72,6 +77,7 @@ function Pencil(degradation = 0, eraserDegradation = 0) {
 	obj.OriginalDegradation = passedParameterDegradation;
 	obj.degradation = passedParameterDegradation;
 	obj.eraserDegradation = passedParameterEraserDegradation;
+	obj.length = passedParameterPencilLength;
 	obj.write = write;
 	obj.erase = erase;
 	obj.edit = edit;
@@ -125,7 +131,8 @@ function* iterateOverEntireArray(array) {
 			yield [letter, wordIndex, letterIndex];
 		}
 		wordIndex++;
-		if (wordIndex < array.length) yield [' ', wordIndex - 1, wordIndex, true];
+		if (wordIndex < array.length)
+			yield [' ', wordIndex - 1, wordIndex, true];
 	}
 
 	yield 'done';
@@ -230,7 +237,10 @@ let writeOver = (paper, at, withThisWord, originalDurability) => {
 			durability = wrotePaper[0];
 			newPaper = wrotePaper[1];
 			if (wrotePaper[2])
-				lettersInSpaceParkingLot = [...lettersInSpaceParkingLot, wrotePaper[2]];
+				lettersInSpaceParkingLot = [
+					...lettersInSpaceParkingLot,
+					wrotePaper[2]
+				];
 			return iterateOverWordsToWrite();
 		} else {
 			return iterateOverWordsToWrite();
@@ -274,7 +284,11 @@ let mergeArrayAt = (arrayToMerge, indexOf, addLetter) => {
 				...arrayToMerge[indexOf + 1]
 			];
 		} else {
-			merge = [...arrayToMerge[indexOf], ' ', ...arrayToMerge[indexOf + 1]];
+			merge = [
+				...arrayToMerge[indexOf],
+				' ',
+				...arrayToMerge[indexOf + 1]
+			];
 		}
 		var arrayBefore = arrayToMerge.filter((word, i) => {
 			if (i < indexOf) return word;

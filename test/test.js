@@ -10,46 +10,76 @@ let spy = sinon.spy(console, 'log');
 
 describe('new Pencil()', function() {
 	it('makes a new pencil when positive intergers are passed', function() {
-		let graphiteDegradationStrength = 32, eraserDegradationStrength = 32;
+		let graphiteDegradationStrength = 32,
+			eraserDegradationStrength = 32,
+			lengthOfPencil = 5;
 		const prismacolor = new Pencil(
 			graphiteDegradationStrength,
-			eraserDegradationStrength
+			eraserDegradationStrength,
+			lengthOfPencil
 		);
 		assert.deepEqual(
-			[graphiteDegradationStrength, eraserDegradationStrength],
-			[prismacolor.degradation, prismacolor.eraserDegradation]
+			[
+				graphiteDegradationStrength,
+				eraserDegradationStrength,
+				lengthOfPencil
+			],
+			[
+				prismacolor.degradation,
+				prismacolor.eraserDegradation,
+				prismacolor.length
+			]
 		);
 	});
 
 	it('handles float parameters by rounding value down', function() {
-		let graphiteDegradationStrength = 32.3, eraserDegradationStrength = 10;
+		let graphiteDegradationStrength = 32.3,
+			eraserDegradationStrength = 32.3,
+			lengthOfPencil = 5.3;
 		const prismacolor = new Pencil(
 			graphiteDegradationStrength,
-			eraserDegradationStrength
+			eraserDegradationStrength,
+			lengthOfPencil
 		);
-		let roundedVal = Math.floor(graphiteDegradationStrength);
+
 		assert.deepEqual(
-			[roundedVal, eraserDegradationStrength],
-			[prismacolor.degradation, prismacolor.eraserDegradation]
+			[
+				Math.floor(graphiteDegradationStrength),
+				Math.floor(eraserDegradationStrength),
+				Math.floor(lengthOfPencil)
+			],
+			[
+				prismacolor.degradation,
+				prismacolor.eraserDegradation,
+				prismacolor.length
+			]
 		);
 	});
 
 	it('handles negitive parameters by throwing an error', function() {
-		let graphiteDegradationStrength = -32, eraserDegradationStrength = 10;
+		let graphiteDegradationStrength = -32,
+			eraserDegradationStrength = -32,
+			lengthOfPencil = -5;
+
 		expect(_ => {
 			const prismacolor = new Pencil(
 				graphiteDegradationStrength,
-				eraserDegradationStrength
+				eraserDegradationStrength,
+				lengthOfPencil
 			);
 		}).to.throw('new Pencil may not have negitive properties');
 	});
 
 	it('handles string parameters by throwing an error', function() {
-		let graphiteDegradationStrength = '32', eraserDegradationStrength = 10;
+		let graphiteDegradationStrength = '32',
+			eraserDegradationStrength = '32',
+			lengthOfPencil = '5';
+
 		expect(_ => {
 			const prismacolor = new Pencil(
 				graphiteDegradationStrength,
-				eraserDegradationStrength
+				eraserDegradationStrength,
+				lengthOfPencil
 			);
 		}).to.throw('new Pencil may not have a string property');
 	});
@@ -57,18 +87,24 @@ describe('new Pencil()', function() {
 
 describe('pencil.write()', function() {
 	it('should exist', function() {
-		let graphiteDegradationStrength = 32, eraserDegradationStrength = 10;
+		let graphiteDegradationStrength = 32,
+			eraserDegradationStrength = 32,
+			lengthOfPencil = 5;
 		const prismacolor = new Pencil(
 			graphiteDegradationStrength,
-			eraserDegradationStrength
+			eraserDegradationStrength,
+			lengthOfPencil
 		);
 		assert.isFunction(prismacolor.write);
 	});
 	it('should return an Array of Arrays of strings for each letter', function() {
-		let graphiteDegradationStrength = 32, eraserDegradationStrength = 10;
+		let graphiteDegradationStrength = 32,
+			eraserDegradationStrength = 32,
+			lengthOfPencil = 5;
 		const prismacolor = new Pencil(
 			graphiteDegradationStrength,
-			eraserDegradationStrength
+			eraserDegradationStrength,
+			lengthOfPencil
 		);
 		prismacolor.write('Hello World');
 
@@ -78,10 +114,13 @@ describe('pencil.write()', function() {
 		]);
 	});
 	it('should append an empty array for extra spaces', function() {
-		let graphiteDegradationStrength = 32, eraserDegradationStrength = 10;
+		let graphiteDegradationStrength = 32,
+			eraserDegradationStrength = 32,
+			lengthOfPencil = 5;
 		const prismacolor = new Pencil(
 			graphiteDegradationStrength,
-			eraserDegradationStrength
+			eraserDegradationStrength,
+			lengthOfPencil
 		);
 		let arrayToCheck = prismacolor.write('Hello   World ').wordsToWrite;
 
@@ -94,10 +133,13 @@ describe('pencil.write()', function() {
 		]);
 	});
 	it('handle special characters', function() {
-		let graphiteDegradationStrength = 32, eraserDegradationStrength = 10;
+		let graphiteDegradationStrength = 32,
+			eraserDegradationStrength = 32,
+			lengthOfPencil = 5;
 		const prismacolor = new Pencil(
 			graphiteDegradationStrength,
-			eraserDegradationStrength
+			eraserDegradationStrength,
+			lengthOfPencil
 		);
 		let arrayToCheck = prismacolor.write(' !"#$%&()*+,-./:;<=>?@[]^_`{|}~')
 			.wordsToWrite;
@@ -139,16 +181,29 @@ describe('pencil.write()', function() {
 		]);
 	});
 	it('should stop writing when point degradation is reached', function() {
-		const prismacolor = new Pencil(8, 5);
-		let easel = [];
-		easel = prismacolor.write('Hello World').on(easel);
-		assert.deepEqual(easel, [['H', 'e', 'l', 'l', 'o'], ['W', '', '', '', '']]);
-	});
-	it('should write new words to existing array', function() {
-		let graphiteDegradationStrength = 320, eraserDegradationStrength = 10;
+		let graphiteDegradationStrength = 8,
+			eraserDegradationStrength = 32,
+			lengthOfPencil = 5;
 		const prismacolor = new Pencil(
 			graphiteDegradationStrength,
-			eraserDegradationStrength
+			eraserDegradationStrength,
+			lengthOfPencil
+		);
+		let easel = [];
+		easel = prismacolor.write('Hello World').on(easel);
+		assert.deepEqual(easel, [
+			['H', 'e', 'l', 'l', 'o'],
+			['W', '', '', '', '']
+		]);
+	});
+	it('should write new words to existing array', function() {
+		let graphiteDegradationStrength = 320,
+			eraserDegradationStrength = 32,
+			lengthOfPencil = 5;
+		const prismacolor = new Pencil(
+			graphiteDegradationStrength,
+			eraserDegradationStrength,
+			lengthOfPencil
 		);
 		let easel = [];
 		easel = prismacolor.write('Hello Dolores').on(easel);
@@ -165,36 +220,69 @@ describe('pencil.write()', function() {
 
 describe('pencil.sharpen()', function() {
 	it('should exist', function() {
-		let graphiteDegradationStrength = 18, eraserDegradationStrength = 5;
+		let graphiteDegradationStrength = 320,
+			eraserDegradationStrength = 32,
+			lengthOfPencil = 5;
 		const prismacolor = new Pencil(
 			graphiteDegradationStrength,
-			eraserDegradationStrength
+			eraserDegradationStrength,
+			lengthOfPencil
 		);
 		assert.isFunction(prismacolor.sharpen);
 	});
 	it('restores the point to original health after use', function() {
-		const prismacolor = new Pencil(18, 5);
+		let graphiteDegradationStrength = 320,
+			eraserDegradationStrength = 32,
+			lengthOfPencil = 5;
+		const prismacolor = new Pencil(
+			graphiteDegradationStrength,
+			eraserDegradationStrength,
+			lengthOfPencil
+		);
 		let easel = [];
 		easel = prismacolor.write('Hello World').on(easel);
 		prismacolor.sharpen();
 		assert.equal(prismacolor.degradation, prismacolor.OriginalDegradation);
 	});
+	it('will not sharpen if length is too short', function() {
+		let graphiteDegradationStrength = 320,
+			eraserDegradationStrength = 32,
+			lengthOfPencil = 0;
+		const prismacolor = new Pencil(
+			graphiteDegradationStrength,
+			eraserDegradationStrength,
+			lengthOfPencil
+		);
+		let easel = [];
+		easel = prismacolor.write('Hello World').on(easel);
+		prismacolor.sharpen();
+		assert.notEqual(
+			prismacolor.degradation,
+			prismacolor.OriginalDegradation
+		);
+	});
 });
 
 describe('pencil.erase()', function() {
 	it('should exist', function() {
-		let graphiteDegradationStrength = 18, eraserDegradationStrength = 5;
+		let graphiteDegradationStrength = 32,
+			eraserDegradationStrength = 32,
+			lengthOfPencil = 5;
 		const prismacolor = new Pencil(
 			graphiteDegradationStrength,
-			eraserDegradationStrength
+			eraserDegradationStrength,
+			lengthOfPencil
 		);
 		assert.isFunction(prismacolor.erase);
 	});
-	it('should remove partial words', function() {
-		let graphiteDegradationStrength = 18, eraserDegradationStrength = 5;
+	it('should remove partial words in reverse letter order', function() {
+		let graphiteDegradationStrength = 32,
+			eraserDegradationStrength = 32,
+			lengthOfPencil = 5;
 		const prismacolor = new Pencil(
 			graphiteDegradationStrength,
-			eraserDegradationStrength
+			eraserDegradationStrength,
+			lengthOfPencil
 		);
 		let easel = [];
 		easel = prismacolor.write('Hello World').on(easel);
@@ -212,10 +300,13 @@ describe('pencil.erase()', function() {
 	});
 
 	it('should remove whole words', function() {
-		let graphiteDegradationStrength = 18, eraserDegradationStrength = 5;
+		let graphiteDegradationStrength = 32,
+			eraserDegradationStrength = 32,
+			lengthOfPencil = 5;
 		const prismacolor = new Pencil(
 			graphiteDegradationStrength,
-			eraserDegradationStrength
+			eraserDegradationStrength,
+			lengthOfPencil
 		);
 		let easel = [];
 		easel = prismacolor.write('Hello World').on(easel);
@@ -233,10 +324,13 @@ describe('pencil.erase()', function() {
 	});
 
 	it('should stop removing letters when word length is reached', function() {
-		let graphiteDegradationStrength = 18, eraserDegradationStrength = 5;
+		let graphiteDegradationStrength = 32,
+			eraserDegradationStrength = 32,
+			lengthOfPencil = 5;
 		const prismacolor = new Pencil(
 			graphiteDegradationStrength,
-			eraserDegradationStrength
+			eraserDegradationStrength,
+			lengthOfPencil
 		);
 		let easel = [];
 		easel = prismacolor.write('Hello World').on(easel);
@@ -254,10 +348,13 @@ describe('pencil.erase()', function() {
 	});
 
 	it('should stop removing letters when eraser heath is used up', function() {
-		let graphiteDegradationStrength = 18, eraserDegradationStrength = 3;
+		let graphiteDegradationStrength = 32,
+			eraserDegradationStrength = 3,
+			lengthOfPencil = 5;
 		const prismacolor = new Pencil(
 			graphiteDegradationStrength,
-			eraserDegradationStrength
+			eraserDegradationStrength,
+			lengthOfPencil
 		);
 		let easel = [];
 		easel = prismacolor.write('Hello World').on(easel);
@@ -275,10 +372,13 @@ describe('pencil.erase()', function() {
 	});
 
 	it('should skip over carrage returns', function() {
-		let graphiteDegradationStrength = 18, eraserDegradationStrength = 10;
+		let graphiteDegradationStrength = 32,
+			eraserDegradationStrength = 32,
+			lengthOfPencil = 5;
 		const prismacolor = new Pencil(
 			graphiteDegradationStrength,
-			eraserDegradationStrength
+			eraserDegradationStrength,
+			lengthOfPencil
 		);
 		let easel = [];
 		easel = prismacolor.write('Hello \nWorld').on(easel);
@@ -298,18 +398,24 @@ describe('pencil.erase()', function() {
 
 describe('pencil.edit()', function() {
 	it('should exist', function() {
-		let graphiteDegradationStrength = 18, eraserDegradationStrength = 5;
+		let graphiteDegradationStrength = 32,
+			eraserDegradationStrength = 32,
+			lengthOfPencil = 5;
 		const prismacolor = new Pencil(
 			graphiteDegradationStrength,
-			eraserDegradationStrength
+			eraserDegradationStrength,
+			lengthOfPencil
 		);
 		assert.isFunction(prismacolor.edit);
 	});
 	it('takes new text and writes over text on a paper', function() {
-		let graphiteDegradationStrength = 75, eraserDegradationStrength = 10;
+		let graphiteDegradationStrength = 75,
+			eraserDegradationStrength = 32,
+			lengthOfPencil = 5;
 		const prismacolor = new Pencil(
 			graphiteDegradationStrength,
-			eraserDegradationStrength
+			eraserDegradationStrength,
+			lengthOfPencil
 		);
 		let easel = [];
 		easel = prismacolor.write('Hello').on(easel);
@@ -335,10 +441,13 @@ describe('pencil.edit()', function() {
 		]);
 	});
 	it('combines word arrays together where necessary', function() {
-		let graphiteDegradationStrength = 75, eraserDegradationStrength = 10;
+		let graphiteDegradationStrength = 75,
+			eraserDegradationStrength = 32,
+			lengthOfPencil = 5;
 		const prismacolor = new Pencil(
 			graphiteDegradationStrength,
-			eraserDegradationStrength
+			eraserDegradationStrength,
+			lengthOfPencil
 		);
 		let easel = [];
 		easel = prismacolor.write('Hello').on(easel);
@@ -389,10 +498,13 @@ describe('pencil.edit()', function() {
 		]);
 	});
 	it('edits new text and skips white space', function() {
-		let graphiteDegradationStrength = 75, eraserDegradationStrength = 10;
+		let graphiteDegradationStrength = 75,
+			eraserDegradationStrength = 32,
+			lengthOfPencil = 5;
 		const prismacolor = new Pencil(
 			graphiteDegradationStrength,
-			eraserDegradationStrength
+			eraserDegradationStrength,
+			lengthOfPencil
 		);
 		let easel = [];
 		easel = prismacolor.write('Hello').on(easel);
@@ -423,10 +535,13 @@ describe('pencil.edit()', function() {
 		]);
 	});
 	it('throws RangeError when asked to edit too many characters', function() {
-		let graphiteDegradationStrength = 75, eraserDegradationStrength = 10;
+		let graphiteDegradationStrength = 75,
+			eraserDegradationStrength = 32,
+			lengthOfPencil = 5;
 		const prismacolor = new Pencil(
 			graphiteDegradationStrength,
-			eraserDegradationStrength
+			eraserDegradationStrength,
+			lengthOfPencil
 		);
 		let easel = [];
 		easel = prismacolor.write('Hello').on(easel);
@@ -457,10 +572,13 @@ describe('pencil.edit()', function() {
 		}).to.throw('cannot edit, editor has exceeded edge of paper');
 	});
 	it('stops editing when point strength is too low', function() {
-		let graphiteDegradationStrength = 45, eraserDegradationStrength = 10;
+		let graphiteDegradationStrength = 45,
+			eraserDegradationStrength = 32,
+			lengthOfPencil = 5;
 		const prismacolor = new Pencil(
 			graphiteDegradationStrength,
-			eraserDegradationStrength
+			eraserDegradationStrength,
+			lengthOfPencil
 		);
 		let easel = [];
 		easel = prismacolor.write('Hello').on(easel);
@@ -519,10 +637,13 @@ describe('showPaper()', function() {
 		assert.isFunction(showPaper);
 	});
 	it('displays words written to paper one time', function() {
-		let graphiteDegradationStrength = 18, eraserDegradationStrength = 10;
+		let graphiteDegradationStrength = 18,
+			eraserDegradationStrength = 32,
+			lengthOfPencil = 5;
 		const prismacolor = new Pencil(
 			graphiteDegradationStrength,
-			eraserDegradationStrength
+			eraserDegradationStrength,
+			lengthOfPencil
 		);
 		let easel = [];
 		easel = prismacolor.write('Hello World').on(easel);
@@ -530,23 +651,31 @@ describe('showPaper()', function() {
 		nativeAssert(spy.calledWith('---\nHello World\n---'));
 	});
 	it('displays words written to the same paper three times', function() {
-		let graphiteDegradationStrength = 75, eraserDegradationStrength = 10;
+		let graphiteDegradationStrength = 75,
+			eraserDegradationStrength = 32,
+			lengthOfPencil = 5;
 		const prismacolor = new Pencil(
 			graphiteDegradationStrength,
-			eraserDegradationStrength
+			eraserDegradationStrength,
+			lengthOfPencil
 		);
 		let easel = [];
 		easel = prismacolor.write('Hello').on(easel);
 		easel = prismacolor.write('Dolores').on(easel);
 		easel = prismacolor.write('\nWelcome to World').on(easel);
 		showPaper(easel);
-		nativeAssert(spy.calledWith('---\nHello Dolores \nWelcome to World\n---'));
+		nativeAssert(
+			spy.calledWith('---\nHello Dolores \nWelcome to World\n---')
+		);
 	});
 	it('displays a paper after one word is erased', function() {
-		let graphiteDegradationStrength = 75, eraserDegradationStrength = 10;
+		let graphiteDegradationStrength = 75,
+			eraserDegradationStrength = 32,
+			lengthOfPencil = 5;
 		const prismacolor = new Pencil(
 			graphiteDegradationStrength,
-			eraserDegradationStrength
+			eraserDegradationStrength,
+			lengthOfPencil
 		);
 		let easel = [];
 		easel = prismacolor.write('Hello').on(easel);
@@ -558,13 +687,18 @@ describe('showPaper()', function() {
 		};
 		easel = prismacolor.erase(erase_opt).from(easel);
 		showPaper(easel);
-		nativeAssert(spy.calledWith('---\nHello Dolores \nWel     to World\n---'));
+		nativeAssert(
+			spy.calledWith('---\nHello Dolores \nWel     to World\n---')
+		);
 	});
 	it('displays a paper after three words are erased', function() {
-		let graphiteDegradationStrength = 75, eraserDegradationStrength = 10;
+		let graphiteDegradationStrength = 75,
+			eraserDegradationStrength = 32,
+			lengthOfPencil = 5;
 		const prismacolor = new Pencil(
 			graphiteDegradationStrength,
-			eraserDegradationStrength
+			eraserDegradationStrength,
+			lengthOfPencil
 		);
 		let easel = [];
 		easel = prismacolor.write('Hello').on(easel);
@@ -586,7 +720,9 @@ describe('showPaper()', function() {
 		};
 		easel = prismacolor.erase(erase_opt).from(easel);
 		showPaper(easel);
-		nativeAssert(spy.calledWith('---\nHe    Dolores \nWel     t  World\n---'));
+		nativeAssert(
+			spy.calledWith('---\nHe    Dolores \nWel     t  World\n---')
+		);
 	});
 });
 
