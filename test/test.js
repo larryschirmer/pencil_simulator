@@ -1,10 +1,10 @@
 'use strict';
 
-var { assert, expect } = require('chai');
+let { assert, expect } = require('chai');
 const sinon = require('sinon');
 const nativeAssert = require('assert');
-var { showPaper, inspect } = require('../view');
-var { Pencil } = require('../pencilLogic');
+let { showPaper, inspect } = require('../view');
+let { Pencil } = require('../pencilLogic');
 
 let spy = sinon.spy(console, 'log');
 
@@ -83,7 +83,7 @@ describe('pencil.write()', function() {
 			graphiteDegradationStrength,
 			eraserDegradationStrength
 		);
-		var arrayToCheck = prismacolor.write('Hello   World ').wordsToWrite;
+		let arrayToCheck = prismacolor.write('Hello   World ').wordsToWrite;
 
 		assert.deepEqual(arrayToCheck, [
 			['H', 'e', 'l', 'l', 'o'],
@@ -99,7 +99,7 @@ describe('pencil.write()', function() {
 			graphiteDegradationStrength,
 			eraserDegradationStrength
 		);
-		var arrayToCheck = prismacolor.write(' !"#$%&()*+,-./:;<=>?@[]^_`{|}~')
+		let arrayToCheck = prismacolor.write(' !"#$%&()*+,-./:;<=>?@[]^_`{|}~')
 			.wordsToWrite;
 
 		assert.deepEqual(arrayToCheck, [
@@ -199,7 +199,7 @@ describe('pencil.erase()', function() {
 		let easel = [];
 		easel = prismacolor.write('Hello World').on(easel);
 
-		var erase_opt = {
+		let erase_opt = {
 			word: 1,
 			amt: 2
 		};
@@ -220,7 +220,7 @@ describe('pencil.erase()', function() {
 		let easel = [];
 		easel = prismacolor.write('Hello World').on(easel);
 
-		var erase_opt = {
+		let erase_opt = {
 			word: 1,
 			amt: 5
 		};
@@ -241,7 +241,7 @@ describe('pencil.erase()', function() {
 		let easel = [];
 		easel = prismacolor.write('Hello World').on(easel);
 
-		var erase_opt = {
+		let erase_opt = {
 			word: 1,
 			amt: 15
 		};
@@ -262,7 +262,7 @@ describe('pencil.erase()', function() {
 		let easel = [];
 		easel = prismacolor.write('Hello World').on(easel);
 
-		var erase_opt = {
+		let erase_opt = {
 			word: 1,
 			amt: 5
 		};
@@ -283,7 +283,7 @@ describe('pencil.erase()', function() {
 		let easel = [];
 		easel = prismacolor.write('Hello \nWorld').on(easel);
 
-		var erase_opt = {
+		let erase_opt = {
 			word: 1,
 			amt: 6
 		};
@@ -315,43 +315,12 @@ describe('pencil.edit()', function() {
 		easel = prismacolor.write('Hello').on(easel);
 		easel = prismacolor.write('Dolores').on(easel);
 		easel = prismacolor.write('\nWelcome to World').on(easel);
-		var erase_opt = {
+		let erase_opt = {
 			word: 1,
 			amt: 7
 		};
 		easel = prismacolor.erase(erase_opt).from(easel);
 
-		let edit_opts = {
-			char_number: 7,
-			word: 'Awesome'
-		};
-		easel = prismacolor.edit(edit_opts).into(easel);
-		assert.deepEqual(
-			easel,
-			assert.deepEqual(easel, [
-				['H', 'e', 'l', 'l', 'o'],
-				['A', 'w', 'e', 's', 'o', 'm', 'e'],
-				['\n', 'W', 'e', 'l', 'c', 'o', 'm', 'e'],
-				['t', 'o'],
-				['W', 'o', 'r', 'l', 'd']
-			])
-		);
-	});
-	it('combines word arrays together where necessary', function() {
-		let graphiteDegradationStrength = 75, eraserDegradationStrength = 10;
-		const prismacolor = new Pencil(
-			graphiteDegradationStrength,
-			eraserDegradationStrength
-		);
-		let easel = [];
-		easel = prismacolor.write('Hello').on(easel);
-		easel = prismacolor.write('Dolores').on(easel);
-		easel = prismacolor.write('\nWelcome to World').on(easel);
-		var erase_opt = {
-			word: 1,
-			amt: 7
-		};
-		easel = prismacolor.erase(erase_opt).from(easel);
 		let edit_opts = {
 			char_number: 6,
 			word: 'Awesome'
@@ -364,6 +333,27 @@ describe('pencil.edit()', function() {
 			['t', 'o'],
 			['W', 'o', 'r', 'l', 'd']
 		]);
+	});
+	it('combines word arrays together where necessary', function() {
+		let graphiteDegradationStrength = 75, eraserDegradationStrength = 10;
+		const prismacolor = new Pencil(
+			graphiteDegradationStrength,
+			eraserDegradationStrength
+		);
+		let easel = [];
+		easel = prismacolor.write('Hello').on(easel);
+		easel = prismacolor.write('Dolores').on(easel);
+		easel = prismacolor.write('\nWelcome to World').on(easel);
+		let erase_opt = {
+			word: 1,
+			amt: 7
+		};
+		easel = prismacolor.erase(erase_opt).from(easel);
+		let edit_opts = {
+			char_number: 6,
+			word: 'Awesome'
+		};
+		easel = prismacolor.edit(edit_opts).into(easel);
 		edit_opts = {
 			char_number: 15,
 			word: 'pizza'
@@ -371,7 +361,7 @@ describe('pencil.edit()', function() {
 		easel = prismacolor.edit(edit_opts).into(easel);
 		edit_opts = {
 			char_number: 22,
-			word: 'e mezuzzah'
+			word: 'e mezuzza'
 		};
 		easel = prismacolor.edit(edit_opts).into(easel);
 		assert.deepEqual(easel, [
@@ -389,12 +379,136 @@ describe('pencil.edit()', function() {
 				'e',
 				't',
 				'@',
-				'@',
+				'e',
 				'@',
 				'@',
 				'@',
 				'@',
 				'@'
+			]
+		]);
+	});
+	it('edits new text and skips white space', function() {
+		let graphiteDegradationStrength = 75, eraserDegradationStrength = 10;
+		const prismacolor = new Pencil(
+			graphiteDegradationStrength,
+			eraserDegradationStrength
+		);
+		let easel = [];
+		easel = prismacolor.write('Hello').on(easel);
+		easel = prismacolor.write('Dolores').on(easel);
+		easel = prismacolor.write('\nWelcome to World').on(easel);
+		let erase_opt = {
+			word: 1,
+			amt: 7
+		};
+		easel = prismacolor.erase(erase_opt).from(easel);
+
+		let edit_opts = {
+			char_number: 6,
+			word: 'Awesome'
+		};
+		easel = prismacolor.edit(edit_opts).into(easel);
+		edit_opts = {
+			char_number: 1,
+			word: 'a b'
+		};
+		easel = prismacolor.edit(edit_opts).into(easel);
+		assert.deepEqual(easel, [
+			['H', '@', 'l', '@', 'o'],
+			['A', 'w', 'e', 's', 'o', 'm', 'e'],
+			['\n', 'W', 'e', 'l', 'c', 'o', 'm', 'e'],
+			['t', 'o'],
+			['W', 'o', 'r', 'l', 'd']
+		]);
+	});
+	it('throws RangeError when asked to edit too many characters', function() {
+		let graphiteDegradationStrength = 75, eraserDegradationStrength = 10;
+		const prismacolor = new Pencil(
+			graphiteDegradationStrength,
+			eraserDegradationStrength
+		);
+		let easel = [];
+		easel = prismacolor.write('Hello').on(easel);
+		easel = prismacolor.write('Dolores').on(easel);
+		easel = prismacolor.write('\nWelcome to World').on(easel);
+		let erase_opt = {
+			word: 1,
+			amt: 7
+		};
+		easel = prismacolor.erase(erase_opt).from(easel);
+		let edit_opts = {
+			char_number: 6,
+			word: 'Awesome'
+		};
+		easel = prismacolor.edit(edit_opts).into(easel);
+		edit_opts = {
+			char_number: 15,
+			word: 'pizza'
+		};
+		easel = prismacolor.edit(edit_opts).into(easel);
+		edit_opts = {
+			char_number: 22,
+			word: 'e mezuzzah'
+		};
+
+		expect(_ => {
+			easel = prismacolor.edit(edit_opts).into(easel);
+		}).to.throw('cannot edit, editor has exceeded edge of paper');
+	});
+	it('stops editing when point strength is too low', function() {
+		let graphiteDegradationStrength = 45, eraserDegradationStrength = 10;
+		const prismacolor = new Pencil(
+			graphiteDegradationStrength,
+			eraserDegradationStrength
+		);
+		let easel = [];
+		easel = prismacolor.write('Hello').on(easel);
+		easel = prismacolor.write('Dolores').on(easel);
+		easel = prismacolor.write('\nWelcome to World').on(easel);
+
+		let erase_opt = {
+			word: 1,
+			amt: 7
+		};
+		easel = prismacolor.erase(erase_opt).from(easel);
+		let edit_opts = {
+			char_number: 6,
+			word: 'Awesome'
+		};
+		easel = prismacolor.edit(edit_opts).into(easel);
+
+		edit_opts = {
+			char_number: 15,
+			word: 'pizza'
+		};
+		easel = prismacolor.edit(edit_opts).into(easel);
+		edit_opts = {
+			char_number: 22,
+			word: 'e mezuzza'
+		};
+		easel = prismacolor.edit(edit_opts).into(easel);
+		assert.deepEqual(easel, [
+			['H', 'e', 'l', 'l', 'o'],
+			['A', 'w', 'e', 's', 'o', 'm', 'e'],
+			[
+				'\n',
+				'@',
+				'@',
+				'@',
+				'@',
+				'@',
+				'm',
+				'e',
+				'e',
+				't',
+				'@',
+				'e',
+				'@',
+				'o',
+				'r',
+				'l',
+				'd'
 			]
 		]);
 	});
@@ -438,7 +552,7 @@ describe('showPaper()', function() {
 		easel = prismacolor.write('Hello').on(easel);
 		easel = prismacolor.write('Dolores').on(easel);
 		easel = prismacolor.write('\nWelcome to World').on(easel);
-		var erase_opt = {
+		let erase_opt = {
 			word: 2,
 			amt: 4
 		};
@@ -456,17 +570,17 @@ describe('showPaper()', function() {
 		easel = prismacolor.write('Hello').on(easel);
 		easel = prismacolor.write('Dolores').on(easel);
 		easel = prismacolor.write('\nWelcome to World').on(easel);
-		var erase_opt = {
+		let erase_opt = {
 			word: 2,
 			amt: 4
 		};
 		easel = prismacolor.erase(erase_opt).from(easel);
-		var erase_opt = {
+		erase_opt = {
 			word: 3,
 			amt: 1
 		};
 		easel = prismacolor.erase(erase_opt).from(easel);
-		var erase_opt = {
+		erase_opt = {
 			word: 0,
 			amt: 3
 		};
