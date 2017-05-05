@@ -261,6 +261,27 @@ describe('pencil.sharpen()', function() {
 			prismacolor.OriginalDegradation
 		);
 	});
+	it('will sharpen until length is too short', function() {
+		let graphiteDegradationStrength = 320,
+			eraserDegradationStrength = 32,
+			lengthOfPencil = 2;
+		const prismacolor = new Pencil(
+			graphiteDegradationStrength,
+			eraserDegradationStrength,
+			lengthOfPencil
+		);
+		let easel = [];
+		easel = prismacolor.write('Hello World').on(easel);
+		prismacolor.sharpen();
+		easel = prismacolor.write('Hello World').on(easel);
+		prismacolor.sharpen();
+		easel = prismacolor.write('Hello World').on(easel);
+		prismacolor.sharpen();
+		assert.notEqual(
+			prismacolor.degradation,
+			prismacolor.OriginalDegradation
+		);
+	});
 });
 
 describe('pencil.erase()', function() {

@@ -64,7 +64,10 @@ function Pencil(degradation = 0, eraserDegradation = 0, pencilLength = 0) {
 	}
 
 	function sharpen() {
-		obj.degradation = obj.OriginalDegradation;
+		if (checkIfCanBeDone(1, obj.length)) {
+			obj.length = degrade(obj.length, 1);
+			obj.degradation = obj.OriginalDegradation;
+		}
 	}
 
 	let passedParameterDegradation = Math.floor(degradation);
@@ -138,7 +141,7 @@ function* iterateOverEntireArray(array) {
 	yield 'done';
 }
 
-let checkIfLetterCanBeWritten = (letterCost, durabilityFactor) => {
+let checkIfCanBeDone = (letterCost, durabilityFactor) => {
 	if (durabilityFactor >= letterCost) {
 		return true;
 	} else {
@@ -193,7 +196,7 @@ let applyPencil = (wordsToWrite, originalDurability) => {
 let writeLetter = (value, writeArray, durability) => {
 	let letterCost = getLetterCost(value[0]);
 
-	if (checkIfLetterCanBeWritten(letterCost, durability)) {
+	if (checkIfCanBeDone(letterCost, durability)) {
 		return [degrade(durability, letterCost), writeArray];
 	} else {
 		//value[1] = wordIndex, value[2] = letterIndex
@@ -258,7 +261,7 @@ let overWriteLetter = (value, mLetter, wordSize, newPaper, durability) => {
 	} else if (newPaper[value[1]] > wordSize) {
 		return [durability, newPaper];
 	} else {
-		if (checkIfLetterCanBeWritten(letterCost, durability)) {
+		if (checkIfCanBeDone(letterCost, durability)) {
 			if (value[0] === ' ') {
 				newPaper[value[1]][value[2]] = mLetter;
 			} else if (mLetter == ' ') {
