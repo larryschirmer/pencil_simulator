@@ -3,7 +3,7 @@
 
 It does many of the things you might expect a pencil and paper to perform, but in a terminal window. Creating pencils that can be sharpened and that can be used to erase your work is easy with the built-in api.
 
-Pencils and Pens can be used to write to media of all kinds. 
+Pencils and Pens can be used to write to media of all kinds.
 
 ### Simple Example Usage
 ```javascript
@@ -47,7 +47,7 @@ let { showPaper, inspect } = require('./view');
 let { Pencil } = require('./pencilLogic');
 ```
 
-## Usage 
+## Usage
 ### Pencil API
 #### new Pencil()
 A Pencil class takes three writing implement properties `pointStrength`, `eraserDexterity`, and `lengthOfPencil` and returns a new pencil. All three properties are optional and will assume a value of `0` if left undefined;
@@ -90,6 +90,3 @@ let edit_opts = {
 };
 cardStock = ticonderoga.edit(edit_opts).into(cardStock);
 ```
-
-
-
