@@ -2,26 +2,34 @@
 let { showPaper, inspect } = require('./view');
 let { Pencil } = require('./pencilLogic');
 
-let graphiteDegradationStrength = 75, eraserDegradationStrength = 32, lengthOfPencil = 5;
-const prismacolor = new Pencil(
-      graphiteDegradationStrength,
-      eraserDegradationStrength,
-      lengthOfPencil
-);
-let easel = [];
-easel = prismacolor.write('Hello').on(easel);
-easel = prismacolor.write('Dolores').on(easel);
-easel = prismacolor.write('\nWelcome to World').on(easel);
+//Create the world's best pencil
+let pointStrength = 50, eraserDexterity = 10, lengthOfPencil = 10;
+const ticonderoga = new Pencil(pointStrength, eraserDexterity, lengthOfPencil);
+
+//Create some Cardstock Paper
+let cardStock = [];
+
+//Begin Writing
+cardStock = ticonderoga.write('Hello World').on(cardStock);
+
+//Look at Your Work
+showPaper(cardStock);
+
+//Erase all of the word 'World'
 let erase_opt = {
       word: 1,
-      amt: 7
+      amt: 5
 };
-easel = prismacolor.erase(erase_opt).from(easel);
+cardStock = ticonderoga.erase(erase_opt).from(cardStock);
 
+//Where the word 'World was is now empty space',
+//Here we fill it with the word 'Plant'
 let edit_opts = {
       char_number: 6,
-      word: 'Awesome'
+      word: 'Plant'
 };
-easel = prismacolor.edit(edit_opts).into(easel);
+cardStock = ticonderoga.edit(edit_opts).into(cardStock);
 
-showPaper(easel);
+inspect(ticonderoga);
+ticonderoga.sharpen();
+inspect(ticonderoga);
