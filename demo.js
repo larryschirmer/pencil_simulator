@@ -10,9 +10,25 @@ const ticonderoga = new Pencil(pointStrength, eraserDexterity, lengthOfPencil);
 let cardStock = [];
 
 //Begin Writing
-cardStock = ticonderoga.write('Hello Word').on(cardStock);
+cardStock = ticonderoga.write('Hello World').on(cardStock);
 
+//Look at Your Work
 showPaper(cardStock);
+
+//Erase all of the word 'World'
+let erase_opt = {
+      word: 1,
+      amt: 5
+};
+cardStock = ticonderoga.erase(erase_opt).from(cardStock);
+
+//Where the word 'World was is now empty space',
+//Here we fill it with the word 'Plant'
+let edit_opts = {
+      char_number: 6,
+      word: 'Plant'
+};
+cardStock = ticonderoga.edit(edit_opts).into(cardStock);
 
 inspect(ticonderoga);
 ticonderoga.sharpen();
