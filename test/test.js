@@ -711,10 +711,17 @@ describe('inspect()', function() {
             }).to.throw('inspect() can only inspect Pencil objects');
       });
       it('displays the status of the pencil in question', function() {
-            const prismacolor = new Pencil(38, 5);
+            let graphiteDegradationStrength = 38, eraserDegradationStrength = 5, lengthOfPencil = 5;
+            const prismacolor = new Pencil(
+                  graphiteDegradationStrength,
+                  eraserDegradationStrength,
+                  lengthOfPencil
+            );
             inspect(prismacolor);
             nativeAssert(
-                  spy.calledWith(`---\nPencil Degradation: 38\nPencil Eraser Degradation: 5\n---`)
+                  spy.calledWith(
+                        `---\nPencil Degradation: 38\nPencil Eraser Degradation: 5\nPencil Length: 5\n---`
+                  )
             );
       });
 });

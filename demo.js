@@ -13,3 +13,7 @@ let cardStock = [];
 cardStock = ticonderoga.write('Hello Word').on(cardStock);
 
 showPaper(cardStock);
+
+inspect(ticonderoga);
+ticonderoga.sharpen();
+inspect(ticonderoga);
