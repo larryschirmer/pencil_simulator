@@ -11,9 +11,10 @@ let {
       removeSpacesForFlattening
 } = require('./pencilLogic_directUseSupport');
 
-let { checkIfCanBeDone, degrade } = require('./pencilLogic_shared');
+let { checkIfCanBeDone, degrade, isNum, isString, isOkToErase } = require('./pencilLogic_shared');
 
 let writeWordsToArray = wordString => {
+      //Force all input to be string type
       wordString = wordString.toString();
       let wordArray = wordString.split(' '); //['word','word']
       let wordArray_with_letterArray = wordArray.map(eachWord => {
@@ -28,26 +29,22 @@ let applyPencil = (wordsToWrite, originalDurability) => {
             durability = originalDurability,
             get = iterateOverEntireArray(wordsToWrite);
 
-      function iterateOverWordsToWrite() {
-            let value = get.next().value;
-
-            if (value == 'done') {
-                  return [wordsAppliedToArray, durability];
-            } else {
-                  let returnedArray = writeLetter(value, wordsToWrite, durability);
-                  durability = returnedArray[0];
-                  wordsAppliedToArray = returnedArray[1];
-                  return iterateOverWordsToWrite();
-            }
+      let value = get.next().value;
+      while (value !== 'done') {
+            let returnedArray = writeLetter(value, wordsToWrite, durability);
+            durability = returnedArray[0];
+            wordsAppliedToArray = returnedArray[1];
+            value = get.next().value;
       }
-
-      return iterateOverWordsToWrite();
+      return [wordsAppliedToArray, durability];
 };
 
 let eraseLetters = (word, amountOfLetters, durability) => {
       let newWord = [], eraserDurability = durability, lettersRemaining = amountOfLetters;
+
       word.reverse().forEach(letter => {
-            if (eraserDurability > 0 && lettersRemaining > 0 && letter !== ' ' && letter !== '\n') {
+            let parameters = [eraserDurability, lettersRemaining, letter];
+            if (isOkToErase(parameters)) {
                   newWord = [...newWord, ' '];
                   eraserDurability = degrade(eraserDurability, 1);
                   lettersRemaining = lettersRemaining - 1;
@@ -79,18 +76,18 @@ let writeOver = (paper, at, withThisWord, originalDurability) => {
             props.totalEditableLetters = arr.length;
             let value = get.next().value;
             if (i >= startOverwrite && i < stopOverwrite) {
-                  let overwriteLetter = withThisWord[i - at],
+                  let letterToChange = withThisWord[i - at],
                         placeInOverwriteWord = i - at,
                         placeInPaper = i,
-                        overwriteWordLength = withThisWord.length;
-                  props = overWriteLetter(
+                        wordSize = withThisWord.length;
+                  props = overWriteLetter({
                         value,
-                        overwriteLetter,
-                        overwriteWordLength,
+                        letterToChange,
+                        wordSize,
                         placeInOverwriteWord,
                         placeInPaper,
                         props
-                  );
+                  });
 
                   if (props.spaceLetter) {
                         props.lettersInSpaces = [...props.lettersInSpaces, props.spaceLetter];

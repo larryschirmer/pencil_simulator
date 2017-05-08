@@ -6,19 +6,16 @@ let {
       writeOver
 } = require('./pencilLogic_directUse');
 
-let { checkIfCanBeDone, degrade } = require('./pencilLogic_shared');
+let { checkIfCanBeDone, degrade, isNegitive, isString } = require('./pencilLogic_shared');
 
 function Pencil(degradation = 0, eraserDegradation = 0, pencilLength = 0) {
+      let parameters = [degradation, eraserDegradation, pencilLength];
+
       //Throw error if included parameters are negitive
-      if (degradation < 0 || eraserDegradation < 0 || pencilLength < 0)
+      if (isNegitive(parameters))
             throw new TypeError('new Pencil may not have negitive properties');
       //Throw error if included parameters are a string
-      if (
-            typeof degradation === 'string' ||
-            typeof eraserDegradation === 'string' ||
-            typeof pencilLength === 'string'
-      )
-            throw new TypeError('new Pencil may not have a string property');
+      if (isString(parameters)) throw new TypeError('new Pencil may not have a string property');
 
       const obj = {};
       Object.setPrototypeOf(obj, Pencil.prototype);
@@ -29,7 +26,7 @@ function Pencil(degradation = 0, eraserDegradation = 0, pencilLength = 0) {
       }
 
       function erase(opt) {
-            obj.wordsToErase = [opt.word, opt.amt];
+            obj.lettersToErase = [opt.word, opt.amt];
             return this;
       }
 
@@ -50,8 +47,8 @@ function Pencil(degradation = 0, eraserDegradation = 0, pencilLength = 0) {
 
       function from(paper) {
             let newPaper = paper;
-            let word = obj.wordsToErase[0];
-            let amountOfLetters = obj.wordsToErase[1];
+            let word = obj.lettersToErase[0];
+            let amountOfLetters = obj.lettersToErase[1];
             let processedWord = eraseLetters(paper[word], amountOfLetters, obj.eraserDegradation);
             newPaper[word] = processedWord[0];
             obj.eraserDegradation = processedWord[1];
@@ -75,12 +72,13 @@ function Pencil(degradation = 0, eraserDegradation = 0, pencilLength = 0) {
             }
       }
 
+      //Force float values to be whole numbers
       let passedParameterDegradation = Math.floor(degradation);
       let passedParameterEraserDegradation = Math.floor(eraserDegradation);
       let passedParameterPencilLength = Math.floor(pencilLength);
 
       obj.wordsToWrite = [];
-      obj.wordsToErase = [];
+      obj.lettersToErase = [];
       obj.wordsToEdit = [];
       obj.OriginalDegradation = passedParameterDegradation;
       obj.degradation = passedParameterDegradation;

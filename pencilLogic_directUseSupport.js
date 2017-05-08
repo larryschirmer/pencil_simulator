@@ -1,11 +1,12 @@
 'use strict';
-let { checkIfCanBeDone, degrade } = require('./pencilLogic_shared');
+let { checkIfCanBeDone, degrade, isNum } = require('./pencilLogic_shared');
+
 let getLetterCost = letter => {
       let letterCost = 1;
-      if (letter == letter.toUpperCase()) letterCost = 2; //is uppercase
-      if (!isNaN(letter * 1)) letterCost = 1; //is a number
-      if (letter === '\n') letterCost = 0; //is carrage return
-      if (letter === ' ') letterCost = 0; //is carrage return
+      if (letter == letter.toUpperCase()) letterCost = 2;
+      if (isNum(letter)) letterCost = 1;
+      if (letter === '\n') letterCost = 0;
+      if (letter === ' ') letterCost = 0;
       return letterCost;
 };
 
@@ -27,43 +28,46 @@ function* iterateOverEntireArray(array) {
 }
 
 let writeLetter = (value, writeArray, durability) => {
-      let letterCost = getLetterCost(value[0]);
+      let letter = value[0],
+            wordIndex = value[1],
+            letterIndex = value[2],
+            letterCost = getLetterCost(letter);
 
       if (checkIfCanBeDone(letterCost, durability)) {
             return [degrade(durability, letterCost), writeArray];
       } else {
-            //value[1] = wordIndex, value[2] = letterIndex
-            writeArray[value[1]][value[2]] = '';
+            writeArray[wordIndex][letterIndex] = '';
             return [durability, writeArray];
       }
 };
 
-let overWriteLetter = (value, mLetter, wordSize, placeInOverwriteWord, placeInPaper, props) => {
+let overWriteLetter = args => {
+      let { value, letterToChange, wordSize, placeInOverwriteWord, placeInPaper, props } = args;
       let { durability, newPaper, lettersInSpaces, spacesAdded, totalEditableLetters } = props;
-      let letterCost = getLetterCost(mLetter), letterIsASpace = value[3], wordNumber = value[1];
+      let letterCost = getLetterCost(letterToChange),
+            letterIsASpace = value[3],
+            letterNumber = value[2],
+            wordNumber = value[1];
 
       let editableLetters = totalEditableLetters,
             lettersLeftToWrite = wordSize - placeInOverwriteWord,
             lettersLeftToWriteover = editableLetters - placeInPaper,
-            bool_willExceedEdge = lettersLeftToWrite > lettersLeftToWriteover ? true : false;
+            wordWillExceedEdge = lettersLeftToWrite > lettersLeftToWriteover ? true : false;
 
       if (letterIsASpace) {
-            let wordNumber = value[1];
-            let spaceLetter = { newPaper, wordNumber, mLetter };
+            let spaceLetter = { newPaper, wordNumber, letterToChange };
             return Object.assign(props, { durability, newPaper, spaceLetter });
-      } else if (bool_willExceedEdge) {
+      } else if (wordWillExceedEdge) {
             throw new RangeError('cannot edit, editor has exceeded edge of paper');
       } else {
             let spacesFilled = lettersInSpaces.length, currentLetter = value[0];
             if (checkIfCanBeDone(letterCost, durability, spacesFilled)) {
                   if (currentLetter === ' ') {
-                        //newPaper[value[1]][value[2]] is place holder for current letter
-                        newPaper[value[1]][value[2]] = mLetter;
+                        newPaper[wordNumber][letterNumber] = letterToChange;
                         durability = degrade(durability, letterCost);
-                  } else if (mLetter == ' ') {
-                        newPaper[value[1]][value[2]] = newPaper[value[1]][value[2]];
+                  } else if (letterToChange == ' ') {
                   } else {
-                        newPaper[value[1]][value[2]] = '@';
+                        newPaper[wordNumber][letterNumber] = '@';
                         durability = degrade(durability, letterCost);
                   }
 
@@ -74,49 +78,33 @@ let overWriteLetter = (value, mLetter, wordSize, placeInOverwriteWord, placeInPa
       }
 };
 
-let mergeArrayAt = (arrayToMerge, indexOf, addLetter) => {
+let mergeArrayAt = (arrayToMerge, index, addLetter) => {
       let mergedArray = [];
       let merge = [];
-      if (arrayToMerge[indexOf] !== undefined) {
-            if (addLetter) {
-                  merge = [...arrayToMerge[indexOf], addLetter, ...arrayToMerge[indexOf + 1]];
-            } else {
-                  merge = [...arrayToMerge[indexOf], ' ', ...arrayToMerge[indexOf + 1]];
-            }
-            var arrayBefore = arrayToMerge.filter((word, i) => {
-                  if (i < indexOf) return word;
-            });
-
-            var arrayAfter = arrayToMerge.filter((word, i) => {
-                  if (i > indexOf + 1) return word;
-            });
-
-            mergedArray = [...arrayBefore, merge, ...arrayAfter];
-            return mergedArray;
-      } else {
-            throw new RangeError('cannot edit, editor has exceeded edge of paper');
-      }
+      merge = [...arrayToMerge[index], addLetter, ...arrayToMerge[index + 1]];
+      var arrayBefore = arrayToMerge.filter((word, i) => {
+            if (i < index) return word;
+      });
+      var arrayAfter = arrayToMerge.filter((word, i) => {
+            if (i > index + 1) return word;
+      });
+      mergedArray = [...arrayBefore, merge, ...arrayAfter];
+      return mergedArray;
 };
 
 let fillInSpaces = props => {
-      let dipIndex = 1;
+      let adjustmentForClosingArrays = 1;
       let newProps = Object.assign({}, props);
 
       newProps.lettersInSpaces.forEach(obj => {
-            dipIndex = dipIndex - 1;
-
-            let letterCost = getLetterCost(obj.mLetter);
-            if (checkIfCanBeDone(letterCost, newProps.durability)) {
-                  newProps.newPaper = mergeArrayAt(
-                        newProps.newPaper,
-                        dipIndex + obj.wordNumber,
-                        obj.mLetter
-                  );
-
-                  newProps.durability = degrade(newProps.durability, letterCost);
-            } else {
-                  console.log(`out of point`);
-            }
+            adjustmentForClosingArrays -= 1;
+            let letterCost = getLetterCost(obj.letterToChange);
+            newProps.newPaper = mergeArrayAt(
+                  newProps.newPaper,
+                  adjustmentForClosingArrays + obj.wordNumber,
+                  obj.letterToChange
+            );
+            newProps.durability = degrade(newProps.durability, letterCost);
       });
 
       return newProps;
