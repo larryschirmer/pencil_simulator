@@ -1,7 +1,7 @@
 {
   "name": "pencil_durability",
-  "version": "0.0.1",
-  "description": "",
+  "version": "0.1.0",
+  "description": "A Pencil Simulator",
   "main": "pencilDurability.js",
   "scripts": {
     "test": "mocha"
