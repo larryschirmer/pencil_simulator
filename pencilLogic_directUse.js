@@ -68,18 +68,19 @@ let writeOver = (paper, at, withThisWord, originalDurability) => {
       let startOverwrite = at,
             stopOverwrite = withThisWord.length + at,
             get = iterateOverEntireArray(props.newPaper),
-            waitToFillInSpaces = true;
+            waitToFillInSpaces = true,
+            wordSize = withThisWord.length;
       //add the spaces necessary to account of the space between words
       props = addSpacesForFlattening(props);
 
-      _.flatten(props.newPaper).forEach((v, i, arr) => {
-            props.totalEditableLetters = arr.length;
-            let value = get.next().value;
+      props.totalEditableLetters = _.flatten(props.newPaper).length;
+      let value = get.next().value;
+      let i = 0;
+      while (value !== 'done') {
             if (i >= startOverwrite && i < stopOverwrite) {
                   let letterToChange = withThisWord[i - at],
                         placeInOverwriteWord = i - at,
-                        placeInPaper = i,
-                        wordSize = withThisWord.length;
+                        placeInPaper = i;
                   props = overWriteLetter({
                         value,
                         letterToChange,
@@ -89,12 +90,16 @@ let writeOver = (paper, at, withThisWord, originalDurability) => {
                         props
                   });
 
+                  //Store letter meant for a place between the word for later
                   if (props.spaceLetter) {
                         props.lettersInSpaces = [...props.lettersInSpaces, props.spaceLetter];
                         props.spaceLetter = false;
                   }
             }
-      });
+            i++;
+            value = get.next().value;
+      }
+
       props = fillInSpaces(props);
       //Remove the spaces added in the beginning
       props = removeSpacesForFlattening(props);
