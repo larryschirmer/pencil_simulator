@@ -1,7 +1,35 @@
 'use strict';
 
 let convertToWordArray = string => {
-      return string.split(' ');
+      let splitString = string.split(' ');
+      splitString = groupSpaces(splitString);
+      return splitString;
+};
+
+let groupSpaces = array => {
+      let FilteredArray = [];
+      let numberOfSpace = 0;
+      array.forEach(word => {
+            if (word == '') {
+                  numberOfSpace += 1;
+            } else {
+                  if (numberOfSpace == 0) {
+                        FilteredArray = [...FilteredArray, word];
+                  } else {
+                        FilteredArray = [...FilteredArray, spacesArray(numberOfSpace), word];
+                        numberOfSpace = 0;
+                  }
+            }
+      });
+      return FilteredArray;
+};
+
+let spacesArray = numberOfSpaces => {
+      let spacedArray = Array.from(Array(numberOfSpaces - 1), _ => {
+            return ' ';
+      });
+      let spaces = spacedArray.join('');
+      return spaces;
 };
 
 let convertToLetterArray = string => {
@@ -24,10 +52,10 @@ let restoreString = array => {
       array.forEach((word, i, arr) => {
             if (Array.isArray(word)) {
                   string = string + word.join('');
-                  if (i < arr.length - 1) string = string + ' ';
             } else {
-                  if (i < arr.length - 1) string += word + ' ';
+                  string = string + word;
             }
+            if (i < arr.length - 1) string = string + ' ';
       });
       return string;
 };

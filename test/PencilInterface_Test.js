@@ -125,7 +125,7 @@ describe('new Pencil()', function() {
             let pointStrength = 11, eraserDexterity = 10, length = 10, pencil, paper, erase_opt;
             beforeEach(function() {
                   pencil = new Pencil(pointStrength, eraserDexterity, length);
-                  paper = 'hello world';
+                  paper = 'hello world, hello eraseing';
             });
 
             it('exists', function() {
@@ -133,27 +133,37 @@ describe('new Pencil()', function() {
             });
 
             it('should remove partial words in reverse letter order', function() {
-                  erase_opt = {
-                        word: 1,
-                        amt: 2
-                  };
-                  assert.deepEqual(pencil.erase(erase_opt).from(paper), 'hello wor  ');
+                  erase_opt = { word: 1, amt: 3 };
+                  assert.deepEqual(
+                        pencil.erase(erase_opt).from(paper),
+                        'hello wor    hello eraseing'
+                  );
             });
 
             it('should remove whole words', function() {
-                  erase_opt = {
-                        word: 1,
-                        amt: 5
-                  };
-                  assert.deepEqual(pencil.erase(erase_opt).from(paper), 'hello      ');
+                  erase_opt = { word: 1, amt: 6 };
+                  assert.deepEqual(
+                        pencil.erase(erase_opt).from(paper),
+                        'hello        hello eraseing'
+                  );
             });
 
             it('should stop removing letters when word length is reached', function() {
-                  erase_opt = {
-                        word: 1,
-                        amt: 15
-                  };
-                  assert.deepEqual(pencil.erase(erase_opt).from(paper), 'hello      ');
+                  erase_opt = { word: 1, amt: 6 };
+                  assert.deepEqual(
+                        pencil.erase(erase_opt).from(paper),
+                        'hello        hello eraseing'
+                  );
+            });
+
+            it('should erase a second word', function() {
+                  erase_opt = { word: 1, amt: 15 };
+                  paper = pencil.erase(erase_opt).from(paper);
+                  erase_opt = { word: 3, amt: 3 };
+                  assert.deepEqual(
+                        pencil.erase(erase_opt).from(paper),
+                        'hello        hello erase   '
+                  );
             });
       });
 
@@ -175,4 +185,65 @@ describe('new Pencil()', function() {
                   assert.deepEqual(pencil.edit(edit_opts) instanceof Pencil, true);
             });
       });
+      /*
+      describe('pencil.into()', function() {
+            let pointStrength = 11, eraserDexterity = 10, length = 10;
+            let pencil, paper, erase_opt, edit_opts;
+            beforeEach(function() {
+                  pencil = new Pencil(pointStrength, eraserDexterity, length);
+                  paper = 'hello world, hello editing';
+                  erase_opt = {
+                  word: 1,
+                  amt: 6
+            };
+            easel = prismacolor.erase(erase_opt).from(easel);
+            });
+
+            it('exists', function() {
+                  assert.isOk(pencil.into);
+            });
+
+            it('writes over empty text on a paper', function() {
+                  erase_opt = {
+                        word: 1,
+                        amt: 2
+                  };
+                  assert.deepEqual(pencil.erase(erase_opt).from(paper), 'hello wor  ');
+            });
+
+            it('combines words together where necessary', function() {
+                  erase_opt = {
+                        word: 1,
+                        amt: 5
+                  };
+                  assert.deepEqual(pencil.erase(erase_opt).from(paper), 'hello      ');
+            });
+
+            it('edits new text and skips white space', function() {
+                  erase_opt = {
+                        word: 1,
+                        amt: 15
+                  };
+                  assert.deepEqual(pencil.erase(erase_opt).from(paper), 'hello      ');
+            });
+
+            it('throws RangeError when asked to edit too many characters', function() {
+                  erase_opt = {
+                        word: 1,
+                        amt: 15
+                  };
+                  expect(_ => {
+                        easel = prismacolor.edit(edit_opts).into(easel);
+                  }).to.throw('cannot edit, editor has exceeded edge of paper');
+            });
+
+            it('stops editing when point strength is too low', function() {
+                  erase_opt = {
+                        word: 1,
+                        amt: 15
+                  };
+                  assert.deepEqual(pencil.erase(erase_opt).from(paper), 'hello      ');
+            });
+      });
+      */
 });
