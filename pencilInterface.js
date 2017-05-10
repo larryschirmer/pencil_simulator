@@ -1,9 +1,9 @@
 'use strict';
-let { roundDown, isNegitive, isString, throwError } = require('./wrapper');
+let { roundDown, hasNegitive, hasString, throwError } = require('./wrapper');
 
 function Pencil(point = 0, eraser = 0, len = 0) {
-      if (isNegitive(arguments)) throwError('negitive');
-      if (isString(arguments)) throwError('string');
+      if (hasNegitive(arguments)) throwError('negitive');
+      if (hasString(arguments)) throwError('string');
 
       let parameters = {
             pointStrength: roundDown(point),

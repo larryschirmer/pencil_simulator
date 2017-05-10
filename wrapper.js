@@ -10,14 +10,14 @@ let roundDown = variable => {
       return Math.floor(variable);
 };
 
-let isNegitive = params => {
+let hasNegitive = params => {
       let state = false;
       for (let key in params)
             if (params[key] < 0) state = true;
       return state;
 };
 
-let isString = params => {
+let hasString = params => {
       let state = false;
       for (let key in params) {
             if (typeof params[key] === 'string') state = true;
@@ -39,7 +39,7 @@ let throwError = error => {
 
 module.exports = {
       roundDown,
-      isNegitive,
-      isString,
+      hasNegitive,
+      hasString,
       throwError
 };
