@@ -165,6 +165,16 @@ describe('new Pencil()', function() {
                         'hello        hello erase   '
                   );
             });
+
+            it('should stop eraseing when eraser is used up', function() {
+                  erase_opt = { word: 1, amt: 15 };
+                  paper = pencil.erase(erase_opt).from(paper);
+                  erase_opt = { word: 3, amt: 10 };
+                  assert.deepEqual(
+                        pencil.erase(erase_opt).from(paper),
+                        'hello        hello eras    '
+                  );
+            });
       });
 
       describe('pencil.edit()', function() {
@@ -185,18 +195,17 @@ describe('new Pencil()', function() {
                   assert.deepEqual(pencil.edit(edit_opts) instanceof Pencil, true);
             });
       });
-      /*
+
       describe('pencil.into()', function() {
             let pointStrength = 11, eraserDexterity = 10, length = 10;
             let pencil, paper, erase_opt, edit_opts;
             beforeEach(function() {
                   pencil = new Pencil(pointStrength, eraserDexterity, length);
-                  paper = 'hello world, hello editing';
-                  erase_opt = {
-                  word: 1,
-                  amt: 6
-            };
-            easel = prismacolor.erase(erase_opt).from(easel);
+                  paper = 'hello        hello editing';
+                  edit_opts = {
+                        char_number: 6,
+                        word: 'Pizza,'
+                  };
             });
 
             it('exists', function() {
@@ -204,46 +213,51 @@ describe('new Pencil()', function() {
             });
 
             it('writes over empty text on a paper', function() {
-                  erase_opt = {
-                        word: 1,
-                        amt: 2
-                  };
-                  assert.deepEqual(pencil.erase(erase_opt).from(paper), 'hello wor  ');
+                  assert.deepEqual(
+                        pencil.edit(edit_opts).into(paper),
+                        'hello Pizza, hello editing'
+                  );
             });
 
             it('combines words together where necessary', function() {
-                  erase_opt = {
-                        word: 1,
-                        amt: 5
+                  paper = pencil.edit(edit_opts).into(paper);
+                  edit_opts = {
+                        char_number: 10,
+                        word: 'slice'
                   };
-                  assert.deepEqual(pencil.erase(erase_opt).from(paper), 'hello      ');
+                  assert.deepEqual(
+                        pencil.edit(edit_opts).into(paper),
+                        'hello Pizz@@i@@llo editing'
+                  );
             });
 
             it('edits new text and skips white space', function() {
-                  erase_opt = {
-                        word: 1,
-                        amt: 15
+                  edit_opts = {
+                        char_number: 6,
+                        word: 'a    @'
                   };
-                  assert.deepEqual(pencil.erase(erase_opt).from(paper), 'hello      ');
+                  assert.deepEqual(
+                        pencil.edit(edit_opts).into(paper),
+                        'hello @izz@, hello editing'
+                  );
             });
 
             it('throws RangeError when asked to edit too many characters', function() {
-                  erase_opt = {
-                        word: 1,
-                        amt: 15
-                  };
                   expect(_ => {
-                        easel = prismacolor.edit(edit_opts).into(easel);
+                        paper = pencil.edit(edit_opts).into(paper);
                   }).to.throw('cannot edit, editor has exceeded edge of paper');
             });
 
             it('stops editing when point strength is too low', function() {
-                  erase_opt = {
-                        word: 1,
-                        amt: 15
+                  paper = pencil.edit(edit_opts).into(paper);
+                  edit_opts = {
+                        char_number: 10,
+                        word: ''
                   };
-                  assert.deepEqual(pencil.erase(erase_opt).from(paper), 'hello      ');
+                  assert.deepEqual(
+                        pencil.edit(edit_opts).into(paper),
+                        'hello Pizza, hello @@@@@ng'
+                  );
             });
       });
-      */
 });
