@@ -1,5 +1,17 @@
 'use strict';
-let { roundDown, hasNegitive, hasString, throwError, getCost, degrade } = require('./wrapper');
+let {
+      roundDown,
+      hasNegitive,
+      hasString,
+      throwError,
+      getCost,
+      degrade,
+      writeWord,
+      convertToWordArray,
+      convertToLetterArray,
+      eraseLetters,
+      restoreString
+} = require('./wrapper');
 
 function Pencil(point = 0, eraser = 0, len = 0) {
       if (hasNegitive(arguments)) throwError('negitive');
@@ -27,7 +39,7 @@ function Pencil(point = 0, eraser = 0, len = 0) {
       }
 
       function on(paper = '') {
-            let wordToWrite = wordQueue.substr(0, properties.pointStrength);
+            let wordToWrite = writeWord(wordQueue, properties.pointStrength);
             let costToWriteLetter = getCost(wordQueue);
             properties.pointStrength = degrade(costToWriteLetter, properties.pointStrength);
             return paper + wordToWrite;
@@ -39,10 +51,18 @@ function Pencil(point = 0, eraser = 0, len = 0) {
             return this;
       }
 
+      function from(paper) {
+            let newPaper = convertToWordArray(paper);
+            let charToErase = Math.min(lettersToErase, properties.eraserDexterity);
+            newPaper = eraseLetters(charToErase, wordNumToErase, newPaper);
+            return restoreString(newPaper);
+      }
+
       obj.get = get;
       obj.write = write;
       obj.on = on;
       obj.erase = erase;
+      obj.from = from;
 
       return obj;
 }

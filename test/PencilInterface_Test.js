@@ -122,7 +122,7 @@ describe('new Pencil()', function() {
       });
 
       describe('pencil.from()', function() {
-            let pointStrength = 11, eraserDexterity = 10, length = 10, pencil, paper, edit_opts;
+            let pointStrength = 11, eraserDexterity = 10, length = 10, pencil, paper, erase_opt;
             beforeEach(function() {
                   pencil = new Pencil(pointStrength, eraserDexterity, length);
                   paper = 'hello world';
