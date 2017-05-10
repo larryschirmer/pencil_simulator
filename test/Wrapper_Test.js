@@ -3,14 +3,7 @@
 let { assert, expect } = require('chai');
 const nativeAssert = require('assert');
 
-let {
-      roundDown,
-      hasNegitive,
-      hasString,
-      throwError,
-      getCost,
-      degradePoint
-} = require('../wrapper');
+let { roundDown, hasNegitive, hasString, throwError, getCost, degrade } = require('../wrapper');
 
 describe('Wrapper Coverage Tests', function() {
       //beforeEach(function() {});
@@ -113,24 +106,24 @@ describe('Wrapper Coverage Tests', function() {
             });
       });
 
-      describe('degradePoint()', function() {
-            let pointStrength;
+      describe('degrade()', function() {
+            let strength;
             beforeEach(function() {
-                  pointStrength = 5;
+                  strength = 5;
             });
 
             it('exists', function() {
-                  assert.isOk(degradePoint);
+                  assert.isOk(degrade);
             });
 
-            it('returns the proper degraded point health', function() {
+            it('returns the proper degraded health', function() {
                   let cost = 3;
-                  assert.deepEqual(degradePoint(cost, pointStrength), 2);
+                  assert.deepEqual(degrade(cost, strength), 2);
             });
 
-            it('returns 0 if point is over degraded', function() {
+            it('returns 0 if amount is over degraded', function() {
                   let cost = 7;
-                  assert.deepEqual(degradePoint(cost, pointStrength), 0);
+                  assert.deepEqual(degrade(cost, strength), 0);
             });
       });
 });

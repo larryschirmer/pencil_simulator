@@ -120,4 +120,40 @@ describe('new Pencil()', function() {
                   assert.deepEqual(pencil.erase(erase_opt) instanceof Pencil, true);
             });
       });
+
+      describe('pencil.from()', function() {
+            let pointStrength = 11, eraserDexterity = 10, length = 10, pencil, paper, edit_opts;
+            beforeEach(function() {
+                  pencil = new Pencil(pointStrength, eraserDexterity, length);
+                  paper = 'hello world';
+            });
+
+            it('exists', function() {
+                  assert.isOk(pencil.from);
+            });
+
+            it('should remove partial words in reverse letter order', function() {
+                  erase_opt = {
+                        word: 1,
+                        amt: 2
+                  };
+                  assert.deepEqual(pencil.erase(erase_opt).from(paper), 'hello wor  ');
+            });
+
+            it('should remove whole words', function() {
+                  erase_opt = {
+                        word: 1,
+                        amt: 5
+                  };
+                  assert.deepEqual(pencil.erase(erase_opt).from(paper), 'hello      ');
+            });
+
+            it('should stop removing letters when word length is reached', function() {
+                  erase_opt = {
+                        word: 1,
+                        amt: 15
+                  };
+                  assert.deepEqual(pencil.erase(erase_opt).from(paper), 'hello      ');
+            });
+      });
 });

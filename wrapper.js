@@ -54,9 +54,9 @@ let getCost = string => {
       return totalCost;
 };
 
-let degradePoint = (cost, currentPointHealth) => {
-      let degradationAmount = currentPointHealth - cost;
-      return degradationAmount < 0 ? 0 : degradationAmount;
+let degrade = (cost, currentHealth) => {
+      let degradationAmount = currentHealth - cost;
+      return degradationAmount > 0 ? degradationAmount : 0;
 };
 
 module.exports = {
@@ -65,5 +65,5 @@ module.exports = {
       hasString,
       throwError,
       getCost,
-      degradePoint
+      degrade
 };

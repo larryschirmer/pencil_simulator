@@ -1,5 +1,5 @@
 'use strict';
-let { roundDown, hasNegitive, hasString, throwError, getCost, degradePoint } = require('./wrapper');
+let { roundDown, hasNegitive, hasString, throwError, getCost, degrade } = require('./wrapper');
 
 function Pencil(point = 0, eraser = 0, len = 0) {
       if (hasNegitive(arguments)) throwError('negitive');
@@ -11,7 +11,8 @@ function Pencil(point = 0, eraser = 0, len = 0) {
             length: roundDown(len)
       };
       let wordQueue = '';
-      let lettersToErase = [];
+      let lettersToErase = 0;
+      let wordNumToErase = 0;
 
       const obj = {};
       Object.setPrototypeOf(obj, Pencil.prototype);
@@ -28,12 +29,13 @@ function Pencil(point = 0, eraser = 0, len = 0) {
       function on(paper = '') {
             let wordToWrite = wordQueue.substr(0, properties.pointStrength);
             let costToWriteLetter = getCost(wordQueue);
-            properties.pointStrength = degradePoint(costToWriteLetter, properties.pointStrength);
+            properties.pointStrength = degrade(costToWriteLetter, properties.pointStrength);
             return paper + wordToWrite;
       }
 
       function erase(opt) {
-            lettersToErase = [opt.word, opt.amt];
+            lettersToErase = opt.amt;
+            wordNumToErase = opt.word;
             return this;
       }
 
