@@ -156,4 +156,23 @@ describe('new Pencil()', function() {
                   assert.deepEqual(pencil.erase(erase_opt).from(paper), 'hello      ');
             });
       });
+
+      describe('pencil.edit()', function() {
+            let pointStrength = 50, eraserDexterity = 10, length = 10, pencil, paper, edit_opts;
+            beforeEach(function() {
+                  pencil = new Pencil(pointStrength, eraserDexterity, length);
+                  edit_opts = {
+                        char_number: 6,
+                        word: 'Plant'
+                  };
+            });
+
+            it('exists', function() {
+                  assert.isOk(pencil.edit);
+            });
+
+            it('returns its parent class', function() {
+                  assert.deepEqual(pencil.edit(edit_opts) instanceof Pencil, true);
+            });
+      });
 });
