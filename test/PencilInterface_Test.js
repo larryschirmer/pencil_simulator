@@ -74,4 +74,30 @@ describe('new Pencil()', function() {
                   assert.deepEqual(pencil.write('') instanceof Pencil, true);
             });
       });
+
+      describe('pencil.on()', function() {
+            let pointStrength = 11, eraserDexterity = 10, length = 10, pencil;
+            beforeEach(function() {
+                  pencil = new Pencil(pointStrength, eraserDexterity, length);
+                  pencil.write('Hello');
+            });
+
+            it('exists', function() {
+                  assert.isOk(pencil.on);
+            });
+
+            it('returns a string of characters stored from .write()', function() {
+                  assert.deepEqual(pencil.on(), 'Hello');
+            });
+
+            it('returns a new string from .write() and a previous string', function() {
+                  let paper = pencil.on();
+                  assert.deepEqual(pencil.write(' World').on(paper), 'Hello World');
+            });
+
+            it('stops appending characters if tip is degraded', function() {
+                  let paper = pencil.on();
+                  assert.deepEqual(pencil.write(' Worlds').on(paper), 'Hello World');
+            });
+      });
 });
