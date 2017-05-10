@@ -11,6 +11,7 @@ function Pencil(point = 0, eraser = 0, len = 0) {
             length: roundDown(len)
       };
       let wordQueue = '';
+      let lettersToErase = [];
 
       const obj = {};
       Object.setPrototypeOf(obj, Pencil.prototype);
@@ -31,9 +32,15 @@ function Pencil(point = 0, eraser = 0, len = 0) {
             return paper + wordToWrite;
       }
 
+      function erase(opt) {
+            lettersToErase = [opt.word, opt.amt];
+            return this;
+      }
+
       obj.get = get;
       obj.write = write;
       obj.on = on;
+      obj.erase = erase;
 
       return obj;
 }

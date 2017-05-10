@@ -113,11 +113,11 @@ describe('new Pencil()', function() {
             });
 
             it('exists', function() {
-                  assert.isOk(pencil.edit);
+                  assert.isOk(pencil.erase);
             });
 
             it('returns its parent class', function() {
-                  assert.deepEqual(pencil.edit(erase_opt) instanceof Pencil, true);
+                  assert.deepEqual(pencil.erase(erase_opt) instanceof Pencil, true);
             });
       });
 });
