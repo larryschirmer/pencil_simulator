@@ -66,7 +66,6 @@ describe('new Pencil()', function() {
                   pencil = new Pencil(pointStrength, eraserDexterity, length);
             });
 
-            //Success Cases
             it('exists', function() {
                   assert.isOk(pencil.write);
             });
