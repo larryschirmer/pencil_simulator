@@ -1,5 +1,5 @@
 'use strict';
-let { roundDown, hasNegitive, hasString, throwError } = require('./wrapper');
+let { roundDown, hasNegitive, hasString, throwError, getCost, degradePoint } = require('./wrapper');
 
 function Pencil(point = 0, eraser = 0, len = 0) {
       if (hasNegitive(arguments)) throwError('negitive');
@@ -24,8 +24,16 @@ function Pencil(point = 0, eraser = 0, len = 0) {
             return this;
       }
 
+      function on(paper = '') {
+            let wordToWrite = wordQueue.substr(0, properties.pointStrength);
+            let costToWriteLetter = getCost(wordQueue);
+            properties.pointStrength = degradePoint(costToWriteLetter, properties.pointStrength);
+            return paper + wordToWrite;
+      }
+
       obj.get = get;
       obj.write = write;
+      obj.on = on;
 
       return obj;
 }
