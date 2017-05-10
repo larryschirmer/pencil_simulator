@@ -100,4 +100,24 @@ describe('new Pencil()', function() {
                   assert.deepEqual(pencil.write(' Worlds').on(paper), 'Hello World');
             });
       });
+
+      describe('pencil.erase()', function() {
+            let pointStrength = 50, eraserDexterity = 10, length = 10, pencil;
+            let erase_opt;
+            beforeEach(function() {
+                  pencil = new Pencil(pointStrength, eraserDexterity, length);
+                  erase_opt = {
+                        word: 1,
+                        amt: 5
+                  };
+            });
+
+            it('exists', function() {
+                  assert.isOk(pencil.edit);
+            });
+
+            it('returns its parent class', function() {
+                  assert.deepEqual(pencil.edit(erase_opt) instanceof Pencil, true);
+            });
+      });
 });
