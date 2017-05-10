@@ -1,17 +1,14 @@
 'use strict';
+let { isNum, roundDown, degrade } = require('./wrapper');
+
+let { hasNegitive, hasString, throwError } = require('./wrap_pencilInterface');
+let { getCost, writeWord } = require('./wrap_writeOn');
 let {
-      roundDown,
-      hasNegitive,
-      hasString,
-      throwError,
-      getCost,
-      degrade,
-      writeWord,
       convertToWordArray,
       convertToLetterArray,
       eraseLetters,
       restoreString
-} = require('./wrapper');
+} = require('./wrap_eraseFrom');
 
 function Pencil(point = 0, eraser = 0, len = 0) {
       if (hasNegitive(arguments)) throwError('negitive');
