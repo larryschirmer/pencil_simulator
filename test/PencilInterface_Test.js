@@ -305,15 +305,17 @@ describe('new Pencil()', function() {
             });
 
             it('restores the point to original health after use', function() {
-                  assert.deepEqual(pencil.inspect.point(), 25);
+                  assert.deepEqual(pencil.inspect.point(), pointStrength);
             });
 
             it('will sharpen until length is too short', function() {
                   pencil.sharpen();
-                  assert.deepEqual(pencil.inspect.point(), 25);
+                  assert.deepEqual(pencil.inspect.point(), pointStrength);
             });
 
             it('will not sharpen if length is too short', function() {
+                  pencil.sharpen();
+                  paper = pencil.write('hello world, hello eraseing').on();
                   pencil.sharpen();
                   assert.deepEqual(pencil.inspect.point(), 1);
             });

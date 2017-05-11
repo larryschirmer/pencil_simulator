@@ -91,6 +91,14 @@ function Pencil(point = 0, eraser = 0, len = 0) {
             }
       };
 
+      function sharpen() {
+            if (properties.length > 0) {
+                  properties.pointStrength = point;
+                  let costToSharpen = 1;
+                  properties.length = degrade(costToSharpen, properties.length);
+            }
+      }
+
       obj.get = get;
       obj.write = write;
       obj.on = on;
@@ -99,6 +107,7 @@ function Pencil(point = 0, eraser = 0, len = 0) {
       obj.edit = edit;
       obj.into = into;
       obj.inspect = inspect;
+      obj.sharpen = sharpen;
 
       return obj;
 }

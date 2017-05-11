@@ -27,6 +27,7 @@ let getCost = string => {
             if (isNum(letter)) letterCost = 1;
             if (letter === '\n') letterCost = 0;
             if (letter === ' ') letterCost = 0;
+            if (letter === ',') letterCost = 1;
             totalCost += letterCost;
       });
       return totalCost;
