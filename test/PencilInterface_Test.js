@@ -76,7 +76,7 @@ describe('new Pencil()', function() {
       });
 
       describe('pencil.on()', function() {
-            let pointStrength = 11, eraserDexterity = 10, length = 10, pencil;
+            let pointStrength = 12, eraserDexterity = 10, length = 10, pencil;
             beforeEach(function() {
                   pencil = new Pencil(pointStrength, eraserDexterity, length);
                   pencil.write('Hello');
@@ -267,7 +267,7 @@ describe('new Pencil()', function() {
       });
 
       describe('pencil.inspect()', function() {
-            let pointStrength = 15, eraserDexterity = 10, length = 10, pencil, paper;
+            let pointStrength = 15, eraserDexterity = 10, length = 10, pencil, paper, erase_opt;
             beforeEach(function() {
                   pencil = new Pencil(pointStrength, eraserDexterity, length);
                   paper = pencil.write('hello world').on();
@@ -283,7 +283,7 @@ describe('new Pencil()', function() {
                   assert.deepEqual(pencil.inspect.point(), 5);
             });
 
-            it('returns the current point strength of the pencil', function() {
+            it("returns the current pencil's eraser health", function() {
                   assert.deepEqual(pencil.inspect.eraser(), 7);
             });
 

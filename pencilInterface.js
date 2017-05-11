@@ -79,6 +79,18 @@ function Pencil(point = 0, eraser = 0, len = 0) {
             return paperArr.join('');
       }
 
+      let inspect = {
+            point: function() {
+                  return properties.pointStrength;
+            },
+            eraser: function() {
+                  return properties.eraserDexterity;
+            },
+            length: function() {
+                  return properties.length;
+            }
+      };
+
       obj.get = get;
       obj.write = write;
       obj.on = on;
@@ -86,6 +98,7 @@ function Pencil(point = 0, eraser = 0, len = 0) {
       obj.from = from;
       obj.edit = edit;
       obj.into = into;
+      obj.inspect = inspect;
 
       return obj;
 }

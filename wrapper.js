@@ -23,10 +23,10 @@ let getCost = string => {
       let totalCost = 0;
       string.split('').forEach(letter => {
             let letterCost = 1;
-            if (string == string.toUpperCase()) letterCost = 2;
-            if (isNum(string)) letterCost = 1;
-            if (string === '\n') letterCost = 0;
-            if (string === ' ') letterCost = 0;
+            if (letter == letter.toUpperCase()) letterCost = 2;
+            if (isNum(letter)) letterCost = 1;
+            if (letter === '\n') letterCost = 0;
+            if (letter === ' ') letterCost = 0;
             totalCost += letterCost;
       });
       return totalCost;
