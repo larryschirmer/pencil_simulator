@@ -232,9 +232,10 @@ describe('new Pencil()', function() {
             });
 
             it('edits new text and skips white space', function() {
+                  paper = pencil.edit(edit_opts).into(paper);
                   edit_opts = {
                         char_number: 6,
-                        word: 'a    @'
+                        word: 'a   @'
                   };
                   assert.deepEqual(
                         pencil.edit(edit_opts).into(paper),
@@ -243,6 +244,10 @@ describe('new Pencil()', function() {
             });
 
             it('throws RangeError when asked to edit too many characters', function() {
+                  edit_opts = {
+                        char_number: 19,
+                        word: 'overstep'
+                  };
                   expect(_ => {
                         paper = pencil.edit(edit_opts).into(paper);
                   }).to.throw('cannot edit, editor has exceeded edge of paper');
@@ -251,8 +256,8 @@ describe('new Pencil()', function() {
             it('stops editing when point strength is too low', function() {
                   paper = pencil.edit(edit_opts).into(paper);
                   edit_opts = {
-                        char_number: 10,
-                        word: ''
+                        char_number: 19,
+                        word: 'world'
                   };
                   assert.deepEqual(
                         pencil.edit(edit_opts).into(paper),

@@ -1,14 +1,16 @@
 'use strict';
-let { isNum, roundDown, degrade } = require('./wrapper');
+let { isNum, roundDown, degrade, getCost } = require('./wrapper');
 
 let { hasNegitive, hasString, throwError } = require('./wrap_pencilInterface');
-let { getCost, writeWord } = require('./wrap_writeOn');
+let { writeWord } = require('./wrap_writeOn');
 let {
       convertToWordArray,
       convertToLetterArray,
       eraseLetters,
       restoreString
 } = require('./wrap_eraseFrom');
+
+let { editLetters } = require('./wrap_editInto');
 
 function Pencil(point = 0, eraser = 0, len = 0) {
       if (hasNegitive(arguments)) throwError('negitive');
@@ -22,8 +24,8 @@ function Pencil(point = 0, eraser = 0, len = 0) {
       let wordQueue = '';
       let lettersToErase = 0;
       let wordNumToErase = 0;
-      let lettersToEdit = 0;
-      let wordNumToEdit = 0;
+      let startEditAt = 0;
+      let wordToEdit = '';
 
       const obj = {};
       Object.setPrototypeOf(obj, Pencil.prototype);
@@ -52,15 +54,29 @@ function Pencil(point = 0, eraser = 0, len = 0) {
 
       function from(paper) {
             let newPaper = convertToWordArray(paper);
-            let charToErase = Math.min(lettersToErase, properties.eraserDexterity);
+            let wordLength = newPaper[wordNumToErase].length;
+            let charToErase = Math.min(lettersToErase, properties.eraserDexterity, wordLength);
             newPaper = eraseLetters(charToErase, wordNumToErase, newPaper);
+            properties.eraserDexterity = degrade(charToErase, properties.eraserDexterity);
             return restoreString(newPaper);
       }
 
       function edit(opt) {
-            lettersToEdit = opt.char_number;
-            wordNumToEdit = opt.word;
+            startEditAt = opt.char_number;
+            wordToEdit = opt.word;
             return this;
+      }
+
+      function into(paper) {
+            let paperArr = paper.split('');
+            let wordArr = wordToEdit.split('');
+            let wordLength = wordToEdit.length;
+            let charToEdit = Math.min(properties.pointStrength, wordLength);
+            let wordWillExceedEdge = wordLength + startEditAt > paperArr.length ? true : false;
+            if (wordWillExceedEdge) throwError('editRange');
+            paperArr = editLetters(paperArr, charToEdit, startEditAt, wordArr);
+            properties.pointStrength = degrade(charToEdit, properties.pointStrength);
+            return paperArr.join('');
       }
 
       obj.get = get;
@@ -69,6 +85,7 @@ function Pencil(point = 0, eraser = 0, len = 0) {
       obj.erase = erase;
       obj.from = from;
       obj.edit = edit;
+      obj.into = into;
 
       return obj;
 }

@@ -3,7 +3,7 @@
 let { assert, expect } = require('chai');
 const nativeAssert = require('assert');
 
-let { isNum, roundDown, degrade } = require('../wrapper');
+let { isNum, roundDown, degrade, getCost } = require('../wrapper');
 
 describe('Wrapper Coverage Tests', function() {
       //beforeEach(function() {});
@@ -50,6 +50,28 @@ describe('Wrapper Coverage Tests', function() {
             it('returns 0 if amount is over degraded', function() {
                   let cost = 7;
                   assert.deepEqual(degrade(cost, strength), 0);
+            });
+      });
+
+      describe('getCost()', function() {
+            it('exists', function() {
+                  assert.isOk(getCost);
+            });
+
+            it('returns 2 if the character is Uppercase', function() {
+                  assert.deepEqual(getCost('H'), 2);
+            });
+
+            it('returns 1 if the character is lowercase', function() {
+                  assert.deepEqual(getCost('h'), 1);
+            });
+
+            it('returns 1 if the character is a number', function() {
+                  assert.deepEqual(getCost('7'), 1);
+            });
+
+            it('returns 0 if the character is space', function() {
+                  assert.deepEqual(getCost(' '), 0);
             });
       });
 });

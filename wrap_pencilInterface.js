@@ -24,6 +24,9 @@ let throwError = error => {
             case 'string':
                   throw new TypeError('new Pencil may not have a string property');
                   break;
+            case 'editRange':
+                  throw new RangeError('cannot edit, editor has exceeded edge of paper');
+                  break;
       }
 };
 
