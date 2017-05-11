@@ -7,19 +7,18 @@ let convertToWordArray = string => {
 };
 
 let groupSpaces = array => {
-      let FilteredArray = [];
-      let numberOfSpace = 0;
+      let FilteredArray = [], numberOfSpaces = 0;
       array.forEach(word => {
             if (word == '') {
-                  numberOfSpace += 1;
-            } else {
-                  if (numberOfSpace == 0) {
-                        FilteredArray = [...FilteredArray, word];
-                  } else {
-                        FilteredArray = [...FilteredArray, spacesArray(numberOfSpace), word];
-                        numberOfSpace = 0;
-                  }
+                  numberOfSpaces += 1;
+                  return;
             }
+            if (numberOfSpaces == 0) {
+                  FilteredArray = [...FilteredArray, word];
+                  return;
+            }
+            FilteredArray = [...FilteredArray, spacesArray(numberOfSpaces), word];
+            numberOfSpaces = 0;
       });
       return FilteredArray;
 };

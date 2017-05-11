@@ -1,11 +1,5 @@
 'use strict';
 
-let log = arr => {
-      arr.forEach(variable => {
-            console.log(`variable: ${JSON.stringify(variable)}`);
-      });
-};
-
 let roundDown = variable => {
       return Math.floor(variable);
 };
@@ -25,8 +19,7 @@ let getCost = string => {
             let letterCost = 1;
             if (letter == letter.toUpperCase()) letterCost = 2;
             if (isNum(letter)) letterCost = 1;
-            if (letter === '\n') letterCost = 0;
-            if (letter === ' ') letterCost = 0;
+            if (letter === '\n' || letter === ' ') letterCost = 0;
             if (letter === ',') letterCost = 1;
             totalCost += letterCost;
       });
