@@ -3,7 +3,7 @@
 let { assert, expect } = require('chai');
 const nativeAssert = require('assert');
 
-let { isNum, roundDown, degrade, getCost } = require('../wrapper');
+let { isNum, roundDown, degrade, getCost, throwError } = require('../wrapper');
 
 describe('Wrapper Coverage Tests', function() {
       //beforeEach(function() {});
@@ -72,6 +72,24 @@ describe('Wrapper Coverage Tests', function() {
 
             it('returns 0 if the character is space', function() {
                   assert.deepEqual(getCost(' '), 0);
+            });
+      });
+
+      describe('throwError()', function() {
+            it('exists', function() {
+                  assert.isOk(throwError);
+            });
+
+            it('throws a negitive new Pencil TypeError', function() {
+                  expect(_ => {
+                        throwError('negitive');
+                  }).to.throw('new Pencil may not have negitive properties');
+            });
+
+            it('throws a string new Pencil TypeError', function() {
+                  expect(_ => {
+                        throwError('string');
+                  }).to.throw('new Pencil may not have a string property');
             });
       });
 });

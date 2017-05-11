@@ -6,7 +6,7 @@ const nativeAssert = require('assert');
 let { Pencil } = require('../pencilInterface');
 let { roundDown } = require('../wrapper');
 
-describe('new Pencil()', function() {
+describe('Pencil API', function() {
       //beforeEach(function() {});
 
       describe('Pencil Class', function() {

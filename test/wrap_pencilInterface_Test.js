@@ -3,7 +3,7 @@
 let { assert, expect } = require('chai');
 const nativeAssert = require('assert');
 
-let { hasNegitive, hasString, throwError } = require('../wrap_pencilInterface');
+let { hasNegitive, hasString } = require('../wrap_pencilInterface');
 
 describe('Pencil Interface Coverage Tests', function() {
       //beforeEach(function() {});
@@ -53,24 +53,6 @@ describe('Pencil Interface Coverage Tests', function() {
             });
             it('returns false if there is no string value in an object', function() {
                   assert.deepEqual(hasString(NumObj), false);
-            });
-      });
-
-      describe('throwError()', function() {
-            it('exists', function() {
-                  assert.isOk(throwError);
-            });
-
-            it('throws a negitive new Pencil TypeError', function() {
-                  expect(_ => {
-                        throwError('negitive');
-                  }).to.throw('new Pencil may not have negitive properties');
-            });
-
-            it('throws a string new Pencil TypeError', function() {
-                  expect(_ => {
-                        throwError('string');
-                  }).to.throw('new Pencil may not have a string property');
             });
       });
 });

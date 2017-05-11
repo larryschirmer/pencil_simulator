@@ -16,22 +16,7 @@ let hasString = params => {
       return state;
 };
 
-let throwError = error => {
-      switch (error) {
-            case 'negitive':
-                  throw new TypeError('new Pencil may not have negitive properties');
-                  break;
-            case 'string':
-                  throw new TypeError('new Pencil may not have a string property');
-                  break;
-            case 'editRange':
-                  throw new RangeError('cannot edit, editor has exceeded edge of paper');
-                  break;
-      }
-};
-
 module.exports = {
       hasNegitive,
-      hasString,
-      throwError
+      hasString
 };

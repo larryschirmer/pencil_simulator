@@ -1,7 +1,7 @@
 'use strict';
-let { isNum, roundDown, degrade, getCost } = require('./wrapper');
+let { isNum, roundDown, degrade, getCost, throwError } = require('./wrapper');
 
-let { hasNegitive, hasString, throwError } = require('./wrap_pencilInterface');
+let { hasNegitive, hasString } = require('./wrap_pencilInterface');
 let { writeWord } = require('./wrap_writeOn');
 let {
       convertToWordArray,
