@@ -44,6 +44,9 @@ let throwError = error => {
             case 'editRange':
                   throw new RangeError('cannot edit, editor has exceeded edge of paper');
                   break;
+            case 'inspectionType':
+                  throw new TypeError('inspect() can only inspect Pencil objects');
+                  break;
       }
 };
 

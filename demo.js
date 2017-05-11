@@ -1,6 +1,6 @@
 'use strict';
-let { showPaper, inspect } = require('./view');
-let { Pencil } = require('./pencilLogic');
+let { showPaper, inspect } = require('./viewInterface');
+let { Pencil } = require('./pencilInterface');
 
 //Create the world's best pencil
 let pointStrength = 50, eraserDexterity = 10, lengthOfPencil = 10;

@@ -6,16 +6,17 @@ const sinon = require('sinon');
 let spy = sinon.spy(console, 'log');
 
 let { Pencil } = require('../pencilInterface');
+let { showPaper, inspect } = require('../viewInterface');
 
 describe('View API', function() {
       //beforeEach(function() {});
 
       describe('showPaper', function() {
-            let pointStrength = 12, eraserDexterity = 10, length = 10, pencil;
+            let pointStrength = 12, eraserDexterity = 10, length = 10, pencil, paper;
 
             beforeEach(function() {
                   pencil = new Pencil(pointStrength, eraserDexterity, length);
-                  pencil.write('Hello');
+                  paper = pencil.write('Hello').on();
             });
 
             it('exists', function() {
@@ -23,7 +24,7 @@ describe('View API', function() {
             });
 
             it('displays words written to a paper', function() {
-                  showPaper(easel);
+                  showPaper(paper);
                   nativeAssert(spy.calledWith('---\nHello\n---'));
             });
       });
@@ -40,7 +41,7 @@ describe('View API', function() {
 
             it('handles inspecting non-pencils by throwing an error', function() {
                   expect(_ => {
-                        inspect(pencil);
+                        inspect(new Array());
                   }).to.throw('inspect() can only inspect Pencil objects');
             });
 
