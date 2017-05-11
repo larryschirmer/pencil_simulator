@@ -292,12 +292,12 @@ describe('new Pencil()', function() {
             });
       });
 
-      /*
       describe('pencil.sharpen()', function() {
-            let pointStrength = 25, eraserDexterity = 10, length = 10, pencil, paper;
+            let pointStrength = 25, eraserDexterity = 10, length = 2, pencil, paper;
             beforeEach(function() {
                   pencil = new Pencil(pointStrength, eraserDexterity, length);
                   paper = pencil.write('hello world, hello eraseing').on();
+                  pencil.sharpen();
             });
 
             it('exists', function() {
@@ -305,16 +305,17 @@ describe('new Pencil()', function() {
             });
 
             it('restores the point to original health after use', function() {
-                  assert.deepEqual(pencil.edit(edit_opts) instanceof Pencil, true);
-            });
-
-            it('will not sharpen if length is too short', function() {
-                  assert.deepEqual(pencil.edit(edit_opts) instanceof Pencil, true);
+                  assert.deepEqual(pencil.inspect.point(), 25);
             });
 
             it('will sharpen until length is too short', function() {
-                  assert.deepEqual(pencil.edit(edit_opts) instanceof Pencil, true);
+                  pencil.sharpen();
+                  assert.deepEqual(pencil.inspect.point(), 25);
+            });
+
+            it('will not sharpen if length is too short', function() {
+                  pencil.sharpen();
+                  assert.deepEqual(pencil.inspect.point(), 1);
             });
       });
-      */
 });
