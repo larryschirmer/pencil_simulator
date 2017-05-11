@@ -265,4 +265,56 @@ describe('new Pencil()', function() {
                   );
             });
       });
+
+      describe('pencil.inspect()', function() {
+            let pointStrength = 15, eraserDexterity = 10, length = 10, pencil, paper;
+            beforeEach(function() {
+                  pencil = new Pencil(pointStrength, eraserDexterity, length);
+                  paper = pencil.write('hello world').on();
+                  erase_opt = { word: 0, amt: 3 };
+                  paper = pencil.erase(erase_opt).from(paper);
+            });
+
+            it('exists', function() {
+                  assert.isOk(pencil.inspect);
+            });
+
+            it('returns the current point strength of the pencil', function() {
+                  assert.deepEqual(pencil.inspect.point(), 5);
+            });
+
+            it('returns the current point strength of the pencil', function() {
+                  assert.deepEqual(pencil.inspect.eraser(), 7);
+            });
+
+            it('returns the current length of the pencil', function() {
+                  assert.deepEqual(pencil.inspect.length(), 10);
+            });
+      });
+
+      /*
+      describe('pencil.sharpen()', function() {
+            let pointStrength = 25, eraserDexterity = 10, length = 10, pencil, paper;
+            beforeEach(function() {
+                  pencil = new Pencil(pointStrength, eraserDexterity, length);
+                  paper = pencil.write('hello world, hello eraseing').on();
+            });
+
+            it('exists', function() {
+                  assert.isOk(pencil.sharpen);
+            });
+
+            it('restores the point to original health after use', function() {
+                  assert.deepEqual(pencil.edit(edit_opts) instanceof Pencil, true);
+            });
+
+            it('will not sharpen if length is too short', function() {
+                  assert.deepEqual(pencil.edit(edit_opts) instanceof Pencil, true);
+            });
+
+            it('will sharpen until length is too short', function() {
+                  assert.deepEqual(pencil.edit(edit_opts) instanceof Pencil, true);
+            });
+      });
+      */
 });
