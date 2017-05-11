@@ -43,11 +43,11 @@ nano ECMAScriptEssay.js
 3. Load the PencilSim API by Copying the Following Lines
 ```
 'use strict';
-let { showPaper, inspect } = require('./view');
-let { Pencil } = require('./pencilLogic');
+let { showPaper, inspect } = require('./viewInterface');
+let { Pencil } = require('./pencilInterface');
 ```
 
-See [Node.js](https://nodejs.org/en/download/package-manager/)'s download page for helpful information to run javascript in your environment. 
+See [Node.js](https://nodejs.org/en/download/package-manager/)'s download page for helpful information to run javascript in your environment.
 ## Usage
 ### Pencil API
 #### new Pencil()
@@ -102,7 +102,7 @@ ticonderoga.sharpen();
 
 ### View API
 #### showPaper(_paper_)
-The `showPaper()` method takes the `array` returned by a `.write().on()` chain, a `.erase().from()` chain, or a `.edit().into()` chain and `console.log`'s the state of the paper. 
+The `showPaper()` method takes the `array` returned by a `.write().on()` chain, a `.erase().from()` chain, or a `.edit().into()` chain and `console.log`'s the state of the paper.
 
 ###### Example
 ```
@@ -110,7 +110,7 @@ showPaper(cardStock);
 ```
 
 #### inspect(_pencil_)
-The `showPaper()` method takes a `Pencil` object and `console.log`'s the state of the pencil. 
+The `showPaper()` method takes a `Pencil` object and `console.log`'s the state of the pencil.
 
 ###### Example
 ```
@@ -124,7 +124,7 @@ mkdir pencil_sim && cd pencil_sim
 git clone https://github.com/larryschirmer/pencil_simulator.git
 cd pencil_simulator
 ```
-2. Run the test 
+2. Run the test
 ```
 npm test
 ```
