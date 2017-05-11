@@ -91,5 +91,17 @@ describe('Wrapper Coverage Tests', function() {
                         throwError('string');
                   }).to.throw('new Pencil may not have a string property');
             });
+
+            it('throws a string new Pencil RangeError', function() {
+                  expect(_ => {
+                        throwError('editRange');
+                  }).to.throw('cannot edit, editor has exceeded edge of paper');
+            });
+
+            it('throws a string new Pencil TypeError', function() {
+                  expect(_ => {
+                        throwError('inspectionType');
+                  }).to.throw('inspect() can only inspect Pencil objects');
+            });
       });
 });
